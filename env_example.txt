@@ -1,0 +1,6 @@
+# API 密鑰設定
+# 請到 https://www.alphavantage.co/support/#api-key 申請免費 API 密鑰
+ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key_here
+
+# 可選：Finnhub API 密鑰 (https://finnhub.io/)
+FINNHUB_API_KEY=your_finnhub_api_key_here 
