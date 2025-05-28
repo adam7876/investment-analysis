@@ -1,213 +1,151 @@
 # 美股投資分析系統
 
-一套基於AI和網頁爬蟲的美股投資分析流程，採用三層邏輯分析架構。
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.0-green.svg)](https://flask.palletsprojects.com/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)](https://getbootstrap.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🎯 系統架構
+> 基於AI和數據分析的專業美股投資決策平台，採用三層架構設計，從宏觀環境到具體操作提供全方位的投資分析。
 
-### 三層分析邏輯
-1. **第一層：總經與市場環境** (✅ 已完成)
-   - 市場情緒分析 (Fear & Greed Index)
-   - 聯準會經濟數據 (FRED API)
-   - 宏觀經濟指標分析
+## 🌐 線上體驗
 
-2. **第二層：事件與產業選股** (🚧 開發中)
-   - 財經事件日曆
-   - 新聞情緒分析
-   - 產業輪動分析
+**🚀 立即使用**: https://web-production-9cc8f.up.railway.app
 
-3. **第三層：基本面與技術確認** (⏳ 規劃中)
-   - 技術分析工具
-   - 基本面評估
-   - 風險管理系統
+## ✨ 核心特色
+
+### 🏗️ 三層架構設計
+
+```
+第一層：總經環境 → 第二層：事件選股 → 第三層：技術確認
+    ↓                ↓                ↓
+宏觀過濾層          催化劑層           操作名單層
+```
+
+### 📊 主要功能
+
+- **🌍 第一層：總經環境**
+  - Fear & Greed Index 市場情緒分析
+  - 聯準會經濟數據 (GDP、失業率、通膨率)
+  - 經濟階段智能識別
+  - 投資策略建議
+
+- **📰 第二層：事件選股**
+  - 財經事件日曆追蹤
+  - 新聞情緒分析
+  - 產業輪動分析
+  - 智能選股篩選
+
+- **📈 第三層：技術確認**
+  - 深度技術指標分析 (RSI、MACD、布林帶)
+  - 支撐阻力位識別
+  - 交易信號生成
+  - 風險管理與投資組合建議
 
 ## 🚀 快速開始
 
-### 方法一：Web介面 (推薦)
+### 線上使用
+直接訪問 https://web-production-9cc8f.up.railway.app 即可使用所有功能。
 
-1. **安裝依賴**
-   ```bash
-   pip3 install -r requirements.txt
-   ```
+### 本地部署
 
-2. **啟動Web介面**
-   ```bash
-   python3 start_web.py
-   ```
-
-3. **打開瀏覽器**
-   ```
-   http://localhost:5000
-   ```
-
-4. **開始使用**
-   - 點擊「前往儀表板」查看分析結果
-   - 點擊「快速分析」進行即時分析
-   - 使用導航欄切換不同功能
-
-### 方法二：命令行介面
-
-1. **第一層分析**
-   ```bash
-   python3 layer1_collector.py
-   ```
-
-2. **功能測試**
-   ```bash
-   python3 test_layer1.py
-   ```
-
-## 📊 Web介面功能
-
-### 🏠 首頁
-- 系統概覽和功能介紹
-- 快速開始指南
-- 系統狀態監控
-
-### 📈 儀表板
-- 實時市場情緒指數
-- 經濟指標展示
-- 智能分析結果
-- 投資建議和風險評估
-- 數據匯出功能
-
-### 🔄 自動更新
-- 點擊「重新整理」獲取最新數據
-- 自動顯示數據收集進度
-- 即時通知系統
-
-## 🛠️ 技術特色
-
-### 數據源
-- **Alternative.me API**: 市場情緒指數
-- **FRED API**: 聯準會官方經濟數據
-- **MacroMicro**: 補充經濟數據 (可選)
-
-### 系統特性
-- ✅ 多數據源備援機制
-- ✅ 優雅降級處理
-- ✅ 現代化Web介面
-- ✅ 響應式設計
-- ✅ 實時數據更新
-- ✅ 智能分析引擎
-
-## 📋 環境配置
-
-### 必需配置
+1. **克隆專案**
 ```bash
-# 複製環境變數範例
-cp env_example.txt .env
-
-# 編輯配置文件
-nano .env
+git clone https://github.com/adam7876/investment-analysis.git
+cd investment-analysis
 ```
 
-### API密鑰 (可選)
-```
-# FRED API (聯準會數據)
-FRED_API_KEY=your_fred_api_key_here
-
-# 其他API密鑰...
-```
-
-**注意**: 即使沒有API密鑰，系統也會使用模擬數據正常運行。
-
-## 🎮 使用指南
-
-### Web介面操作
-1. **首次使用**: 訪問首頁了解系統功能
-2. **數據分析**: 前往儀表板查看分析結果
-3. **重新整理**: 點擊重新整理按鈕獲取最新數據
-4. **匯出報告**: 使用匯出功能保存分析結果
-
-### 命令行操作
+2. **安裝依賴**
 ```bash
-# 完整分析報告
-python3 layer1_collector.py
+pip install -r requirements.txt
+```
 
-# 快速測試
-python3 test_layer1.py
-
-# 啟動Web介面
+3. **啟動系統**
+```bash
 python3 start_web.py
 ```
 
-## 📁 項目結構
+4. **訪問系統**
+```
+http://localhost:5000
+```
+
+## 📖 使用指南
+
+詳細的使用說明請參考 [使用指南.md](使用指南.md)
+
+### 基本操作流程
+
+1. **總經分析**: 在儀表板進行第一層總經環境分析
+2. **事件選股**: 在第二層頁面進行事件驅動選股
+3. **技術確認**: 在第三層頁面進行技術分析和風險評估
+4. **投資決策**: 綜合三層分析結果制定投資策略
+
+## 🛠️ 技術架構
+
+- **後端**: Python 3.9 + Flask 3.0
+- **前端**: HTML5/CSS3 + Bootstrap 5 + JavaScript
+- **數據源**: Yahoo Finance, FRED API, Alternative.me
+- **部署**: Railway 雲端平台
+- **版本控制**: GitHub
+
+## 📊 系統狀態
+
+- ✅ **第一層**: 總經環境分析 - 已完成
+- ✅ **第二層**: 事件選股分析 - 已完成  
+- ✅ **第三層**: 技術確認分析 - 已完成
+- 🌐 **Web介面**: 現代化響應式設計 - 已完成
+- ☁️ **雲端部署**: Railway自動部署 - 已完成
+
+## 📁 專案結構
 
 ```
-select/
-├── app.py                 # Flask Web應用程式
-├── start_web.py          # Web介面啟動腳本
-├── layer1_collector.py   # 第一層數據收集器
-├── test_layer1.py        # 功能測試
-├── config.py             # 系統配置
-├── requirements.txt      # 依賴清單
-├── templates/            # HTML模板
-│   ├── base.html        # 基礎模板
-│   ├── index.html       # 首頁
-│   ├── dashboard.html   # 儀表板
-│   ├── layer2.html      # 第二層頁面
-│   └── layer3.html      # 第三層頁面
-├── scrapers/            # 爬蟲模組
+investment-analysis/
+├── app.py                      # Flask 主應用
+├── start_web.py               # Web 啟動腳本
+├── config.py                  # 配置文件
+├── requirements.txt           # Python 依賴
+├── Procfile                   # Railway 部署配置
+├── runtime.txt                # Python 版本指定
+├── 使用指南.md                # 完整使用指南
+├── 系統完成總結.md            # 開發總結
+├── layer1_collector.py        # 第一層數據收集器
+├── layer2_collector.py        # 第二層數據收集器
+├── layer3_collector.py        # 第三層數據收集器
+├── templates/                 # HTML 模板
+│   ├── base.html             # 基礎模板
+│   ├── index.html            # 首頁
+│   ├── dashboard.html        # 第一層儀表板
+│   ├── layer2.html           # 第二層頁面
+│   └── layer3.html           # 第三層頁面
+├── scrapers/                  # 數據爬蟲模組
 │   ├── alternative_fear_greed_scraper.py
 │   ├── fred_api_scraper.py
-│   └── macromicro_scraper.py
-├── utils/               # 工具模組
-└── logs/               # 日誌文件
+│   ├── macromicro_scraper.py
+│   └── base_scraper.py
+└── utils/                     # 工具模組
+    ├── logger.py             # 日誌工具
+    └── __init__.py
 ```
 
-## 🔧 故障排除
+## 🎯 投資決策流程
 
-### 常見問題
+1. **宏觀環境判斷** → 確定市場整體趨勢和風險偏好
+2. **事件催化分析** → 識別投資機會和風險因子
+3. **技術面確認** → 確定具體進出場時機
+4. **風險管理** → 制定持倉比例和停損策略
 
-1. **Flask未安裝**
-   ```bash
-   pip3 install Flask==3.0.0
-   ```
+## ⚠️ 免責聲明
 
-2. **端口被占用**
-   ```bash
-   # 查找占用端口的進程
-   lsof -i :5000
-   # 終止進程
-   kill -9 <PID>
-   ```
-
-3. **數據獲取失敗**
-   - 檢查網路連接
-   - 確認API密鑰設置
-   - 查看logs/目錄下的日誌文件
-
-### 日誌查看
-```bash
-# 查看最新日誌
-tail -f logs/app_*.log
-```
-
-## 📈 系統狀態
-
-### 第一層功能 ✅
-- [x] Fear & Greed Index 收集
-- [x] FRED 經濟數據收集
-- [x] 市場環境分析
-- [x] 投資建議生成
-- [x] Web介面展示
-
-### 第二層功能 🚧
-- [ ] 財經事件日曆
-- [ ] 新聞情緒分析
-- [ ] 產業輪動分析
-- [ ] 選股篩選器
-
-### 第三層功能 ⏳
-- [ ] 技術分析工具
-- [ ] 基本面評估
-- [ ] 風險管理系統
-- [ ] 選擇權策略
-
-## 🤝 貢獻指南
-
-歡迎提交Issue和Pull Request來改進系統！
+本系統提供的分析和建議僅供參考，不構成投資建議。投資有風險，請根據自身情況謹慎決策。
 
 ## 📄 授權
 
-本項目採用MIT授權條款。 
+本專案採用 MIT 授權條款 - 詳見 [LICENSE](LICENSE) 文件
+
+## 🤝 貢獻
+
+歡迎提交 Issue 和 Pull Request 來改善這個專案。
+
+---
+
+**🎉 立即體驗**: https://web-production-9cc8f.up.railway.app 
