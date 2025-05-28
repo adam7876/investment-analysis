@@ -32,6 +32,8 @@
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1050;
         }
         
         .main-container {
@@ -100,6 +102,27 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dropdown-menu {
+            z-index: 1060 !important;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .dropdown-item {
+            border-radius: 8px;
+            margin: 2px 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(5px);
         }
     </style>
     
