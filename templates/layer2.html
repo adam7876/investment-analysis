@@ -535,28 +535,127 @@ function displayStockScreener(data, container) {
         return;
     }
     
-    let html = '<div class="table-responsive"><table class="table table-striped"><thead><tr><th>股票</th><th>價格</th><th>5日漲跌</th><th>評分</th><th>建議</th><th>理由</th></tr></thead><tbody>';
+    // 統計信息
+    let html = `
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-primary">${data.total_analyzed}</h4>
+                    <p class="small text-muted">分析股票數</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-success">${data.strong_buy_recommendations || 0}</h4>
+                    <p class="small text-muted">強烈買入</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-warning">${data.buy_recommendations}</h4>
+                    <p class="small text-muted">買入推薦</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h4 class="text-info">${data.average_score || 0}</h4>
+                    <p class="small text-muted">平均評分</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 股票卡片展示
+    html += '<div class="row">';
     
     data.stocks.forEach(stock => {
-        const changeClass = stock.price_change_5d > 0 ? 'text-success' : 'text-danger';
-        const recommendationClass = stock.recommendation === '買入' ? 'success' : stock.recommendation === '觀察' ? 'warning' : 'secondary';
+        const changeClass = stock.price_change_5d > 0 ? 'text-success' : stock.price_change_5d < 0 ? 'text-danger' : 'text-muted';
+        const monthChangeClass = stock.price_change_1m > 0 ? 'text-success' : stock.price_change_1m < 0 ? 'text-danger' : 'text-muted';
+        
+        // 評分進度條
+        const scorePercentage = (stock.score / (stock.max_score || 10)) * 100;
+        let scoreColor = 'danger';
+        if (scorePercentage >= 70) scoreColor = 'success';
+        else if (scorePercentage >= 50) scoreColor = 'warning';
+        else if (scorePercentage >= 30) scoreColor = 'info';
         
         html += `
-            <tr>
-                <td>
-                    <strong>${stock.symbol}</strong><br>
-                    <small class="text-muted">${stock.name}</small>
-                </td>
-                <td>$${stock.current_price}</td>
-                <td class="${changeClass}">${stock.price_change_5d}%</td>
-                <td>${stock.score}/4</td>
-                <td><span class="badge bg-${recommendationClass}">${stock.recommendation}</span></td>
-                <td><small>${stock.reasons.join(', ')}</small></td>
-            </tr>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">${stock.symbol}</h6>
+                            <small class="text-muted">${stock.name}</small>
+                        </div>
+                        <span class="badge bg-${stock.rec_color || 'secondary'}">${stock.recommendation}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>$${stock.current_price}</strong>
+                                <br><small class="text-muted">當前價格</small>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="${changeClass}">${stock.price_change_5d > 0 ? '+' : ''}${stock.price_change_5d}%</span>
+                                <br><small class="text-muted">5日漲跌</small>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <span class="${monthChangeClass}">${stock.price_change_1m > 0 ? '+' : ''}${stock.price_change_1m}%</span>
+                                <br><small class="text-muted">月度表現</small>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span>${stock.market_cap_formatted || 'N/A'}</span>
+                                <br><small class="text-muted">市值</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small>評分</small>
+                                <small>${stock.score}/${stock.max_score || 10}</small>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-${scoreColor}" style="width: ${scorePercentage}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">估值指標：</small>
+                            <div class="row">
+                                <div class="col-4">
+                                    <small><strong>PE:</strong> ${stock.pe_ratio}</small>
+                                </div>
+                                <div class="col-4">
+                                    <small><strong>PEG:</strong> ${stock.peg_ratio || 'N/A'}</small>
+                                </div>
+                                <div class="col-4">
+                                    <small><strong>波動:</strong> ${stock.volatility || 'N/A'}%</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <small class="text-muted">推薦理由：</small>
+                            <div class="mt-1">
+                                ${stock.reasons.map(reason => `<span class="badge bg-light text-dark me-1 mb-1">${reason}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         `;
     });
     
-    html += '</tbody></table></div>';
+    html += '</div>';
+    
+    // 如果有備註，顯示備註
+    if (data.note) {
+        html += `<div class="alert alert-info mt-3"><i class="fas fa-info-circle me-2"></i>${data.note}</div>`;
+    }
+    
     container.innerHTML = html;
 }
 </script>

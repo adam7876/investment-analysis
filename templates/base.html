@@ -177,8 +177,21 @@
     
     <!-- 共用 JavaScript -->
     <script>
-        // 顯示通知
+        // 確保Bootstrap正確初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化所有下拉選單
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+        });
+        
+        // 顯示通知 (兼容showToast和showNotification)
         function showNotification(message, type = 'info') {
+            showToast(message, type);
+        }
+        
+        function showToast(message, type = 'info') {
             const toast = document.getElementById('notification-toast');
             const toastMessage = document.getElementById('toast-message');
             
