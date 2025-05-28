@@ -15,6 +15,7 @@ from loguru import logger
 from layer1_collector import Layer1Collector
 from layer2_collector import Layer2Collector
 from layer3_collector import Layer3Collector
+from integrated_analyzer import IntegratedAnalyzer
 
 app = Flask(__name__)
 
@@ -23,6 +24,9 @@ latest_layer1_data = None
 latest_layer2_data = None
 latest_layer3_data = None
 data_lock = threading.Lock()
+
+# 創建整合分析器實例
+integrated_analyzer = IntegratedAnalyzer()
 
 @app.route('/')
 def index():
@@ -310,6 +314,40 @@ def get_risk_management():
             'success': False,
             'error': str(e)
         }), 500
+
+# ==================== 整合分析 API ====================
+
+@app.route('/api/integrated-analysis', methods=['POST'])
+def integrated_analysis():
+    """整合三層分析API"""
+    try:
+        # 獲取用戶偏好（如果有的話）
+        user_preferences = request.get_json() if request.is_json else {}
+        
+        logger.info("🚀 開始執行整合三層分析...")
+        
+        # 執行完整的三層聯動分析
+        result = integrated_analyzer.analyze_complete_flow(user_preferences)
+        
+        if result.get('success'):
+            logger.info("✅ 整合分析完成")
+            return jsonify(result)
+        else:
+            logger.error(f"❌ 整合分析失敗: {result.get('error')}")
+            return jsonify(result), 500
+            
+    except Exception as e:
+        logger.error(f"整合分析API錯誤: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "message": "整合分析服務暫時不可用"
+        }), 500
+
+@app.route('/integrated')
+def integrated_page():
+    """整合分析頁面"""
+    return render_template('integrated.html')
 
 # ==================== 頁面路由 ====================
 
