@@ -151,12 +151,18 @@ class IntegratedAnalyzer:
                 sentiment_analysis, economic_analysis, capital_flow_analysis
             )
             
+            # 提取必要參數
+            market_phase_str = market_phase.get('phase', '盤整期')
+            risk_appetite = sentiment_analysis.get('risk_appetite', '中性')
+            sentiment_score = sentiment_analysis.get('fear_greed_index', 50)
+            gdp_growth = economic_analysis.get('gdp_growth', 2.5)
+            
             return {
                 "market_sentiment": sentiment_analysis,
                 "economic_environment": economic_analysis,
                 "capital_flows": capital_flow_analysis,
                 "market_phase": market_phase,
-                "overall_outlook": self._generate_market_outlook(market_phase),
+                "overall_outlook": self._generate_market_outlook(market_phase_str, risk_appetite, sentiment_score, gdp_growth),
                 "key_risks": self._identify_market_risks(sentiment_analysis, economic_analysis),
                 "confidence_level": self._calculate_market_confidence(sentiment_analysis, economic_analysis)
             }
@@ -2189,12 +2195,36 @@ class IntegratedAnalyzer:
     def _generate_trading_strategy(self, stock: Dict, strategy: Dict) -> Dict[str, Any]:
         """生成交易策略"""
         return {
-            "entry_price": f"${np.random.uniform(180, 220):.2f}",
-            "target_price": f"${np.random.uniform(240, 280):.2f}",
-            "stop_loss": f"${np.random.uniform(160, 180):.2f}",
-            "position_size": "5-10%",
-            "time_horizon": "1-3個月",
-            "catalysts": ["財報發布", "產品發表", "政策利多"]
+            "entry_strategy": "分批建倉",
+            "position_size": "建議3-5%",
+            "stop_loss": f"{stock.get('current_price', 0) * 0.9:.2f}",
+            "take_profit": f"{stock.get('current_price', 0) * 1.2:.2f}",
+            "time_horizon": "3-6個月"
+        }
+    
+    def _generate_risk_management(self, stock: Dict) -> Dict[str, Any]:
+        """生成風險管理策略"""
+        current_price = stock.get('current_price', 0)
+        volatility = stock.get('volatility', 20)
+        
+        # 根據波動率調整停損點
+        if volatility > 30:
+            stop_loss_pct = 0.12  # 高波動股票給更大停損空間
+        elif volatility > 20:
+            stop_loss_pct = 0.10
+        else:
+            stop_loss_pct = 0.08
+        
+        return {
+            "stop_loss": f"{current_price * (1 - stop_loss_pct):.2f}",
+            "stop_loss_pct": f"{stop_loss_pct * 100:.0f}%",
+            "position_size": "建議不超過5%",
+            "risk_level": "高" if volatility > 30 else "中" if volatility > 20 else "低",
+            "monitoring_points": [
+                "關注成交量變化",
+                "留意產業新聞",
+                "監控技術指標"
+            ]
         }
     
     def _assess_volatility_environment(self) -> Dict[str, Any]:
@@ -2527,9 +2557,57 @@ class IntegratedAnalyzer:
         }
     
     def _get_fallback_options_analysis(self) -> Dict:
+        """選擇權分析失敗時的備用方案"""
         return {
-            "strategy_recommendations": [
-                {"strategy": "Buy Call", "underlying": "AAPL", "expected_return": 20}
+            "volatility_environment": {"level": "中等", "trend": "穩定"},
+            "recommended_strategies": [
+                {"type": "觀望", "description": "等待更好的進場時機"},
+                {"type": "保守策略", "description": "考慮賣出價外選擇權"}
             ],
-            "volatility_environment": {"environment": "中等波動"}
+            "risk_management": {"max_risk": "5%", "strategy": "分散投資"},
+            "market_scenarios": {"base_case": "盤整", "bull_case": "溫和上漲", "bear_case": "溫和下跌"},
+            "execution_guidelines": {"timing": "分批進場", "size": "小額測試"},
+            "educational_notes": ["選擇權具有時間價值衰減風險", "建議先學習基礎知識"]
         }
+    
+    def _identify_market_risks(self, sentiment: Dict, economic: Dict) -> List[str]:
+        """識別市場風險"""
+        risks = []
+        
+        # 情緒風險
+        fear_greed = sentiment.get('fear_greed_index', 50)
+        if fear_greed > 80:
+            risks.append("市場過度貪婪，注意回調風險")
+        elif fear_greed < 20:
+            risks.append("市場過度恐慌，可能持續下跌")
+        
+        # 經濟風險
+        gdp_growth = economic.get('gdp_growth', 2.5)
+        if gdp_growth < 1:
+            risks.append("經濟成長放緩，企業獲利承壓")
+        
+        inflation = economic.get('inflation_rate', 3)
+        if inflation > 5:
+            risks.append("通膨壓力可能導致央行緊縮政策")
+        
+        return risks if risks else ["當前風險相對可控"]
+    
+    def _calculate_market_confidence(self, sentiment: Dict, economic: Dict) -> int:
+        """計算市場信心水準"""
+        confidence = 50  # 基準值
+        
+        # 基於情緒調整
+        fear_greed = sentiment.get('fear_greed_index', 50)
+        if 40 <= fear_greed <= 70:
+            confidence += 10  # 情緒適中加分
+        elif fear_greed > 80 or fear_greed < 20:
+            confidence -= 15  # 極端情緒扣分
+        
+        # 基於經濟數據調整
+        gdp_growth = economic.get('gdp_growth', 2.5)
+        if gdp_growth > 3:
+            confidence += 15
+        elif gdp_growth < 1:
+            confidence -= 20
+        
+        return max(0, min(100, confidence))
