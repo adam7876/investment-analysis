@@ -3,14 +3,21 @@ import random
 import requests
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import undetected_chromedriver as uc
 from loguru import logger
 from config import Config
+
+# 嘗試導入selenium，如果失敗則設為None（Railway環境可能沒有）
+try:
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    import undetected_chromedriver as uc
+    SELENIUM_AVAILABLE = True
+except ImportError:
+    SELENIUM_AVAILABLE = False
+    logger.warning("Selenium不可用，將只使用requests進行爬蟲")
 
 class BaseScraper(ABC):
     """基礎爬蟲類"""
@@ -37,9 +44,11 @@ class BaseScraper(ABC):
         logger.info(f"正在獲取頁面: {url}")
         
         try:
-            if use_selenium:
+            if use_selenium and SELENIUM_AVAILABLE:
                 return self._get_page_selenium(url)
             else:
+                if use_selenium and not SELENIUM_AVAILABLE:
+                    logger.warning("Selenium不可用，改用requests")
                 return self._get_page_requests(url)
         except Exception as e:
             logger.error(f"獲取頁面失敗: {url}, 錯誤: {str(e)}")
@@ -66,6 +75,9 @@ class BaseScraper(ABC):
     
     def _get_page_selenium(self, url):
         """使用 Selenium 獲取頁面"""
+        if not SELENIUM_AVAILABLE:
+            raise ImportError("Selenium不可用")
+            
         if not self.driver:
             self._setup_driver()
         
@@ -87,6 +99,9 @@ class BaseScraper(ABC):
     
     def _setup_driver(self):
         """設置 Chrome 驅動"""
+        if not SELENIUM_AVAILABLE:
+            raise ImportError("Selenium不可用")
+            
         try:
             options = Options()
             options.add_argument('--headless')

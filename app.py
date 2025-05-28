@@ -59,6 +59,15 @@ def index():
     """主頁面"""
     return render_template('index.html')
 
+@app.route('/health')
+def health_check():
+    """健康檢查端點"""
+    return jsonify({
+        'status': 'healthy',
+        'message': '四層聯動美股投資分析系統運行正常',
+        'timestamp': datetime.now().isoformat()
+    })
+
 # ==================== 第一層 API ====================
 
 @app.route('/api/layer1/collect', methods=['POST'])
