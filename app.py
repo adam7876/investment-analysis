@@ -14,12 +14,14 @@ from loguru import logger
 
 from layer1_collector import Layer1Collector
 from layer2_collector import Layer2Collector
+from layer3_collector import Layer3Collector
 
 app = Flask(__name__)
 
 # 全域變數儲存最新數據
 latest_layer1_data = None
 latest_layer2_data = None
+latest_layer3_data = None
 data_lock = threading.Lock()
 
 @app.route('/')
@@ -210,6 +212,100 @@ def get_stock_screener():
         })
     except Exception as e:
         logger.error(f"選股篩選失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+# ==================== 第三層 API ====================
+
+@app.route('/api/layer3/collect', methods=['POST'])
+def collect_layer3_data():
+    """收集第三層數據的API端點"""
+    try:
+        collector = Layer3Collector()
+        data = collector.collect_all_data()
+        
+        # 更新全域數據
+        global latest_layer3_data
+        with data_lock:
+            latest_layer3_data = data
+        
+        return jsonify({
+            'success': True,
+            'data': data,
+            'message': '第三層數據收集完成'
+        })
+    except Exception as e:
+        logger.error(f"第三層數據收集失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'message': '第三層數據收集失敗'
+        }), 500
+
+@app.route('/api/layer3/summary')
+def get_layer3_summary():
+    """獲取第三層數據摘要"""
+    try:
+        collector = Layer3Collector()
+        summary = collector.get_summary_report()
+        return jsonify({
+            'success': True,
+            'data': summary
+        })
+    except Exception as e:
+        logger.error(f"第三層摘要獲取失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/layer3/latest')
+def get_latest_layer3_data():
+    """獲取最新的第三層數據"""
+    global latest_layer3_data
+    with data_lock:
+        if latest_layer3_data:
+            return jsonify({
+                'success': True,
+                'data': latest_layer3_data
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': '尚無數據，請先收集數據'
+            })
+
+@app.route('/api/layer3/technical-analysis')
+def get_technical_analysis():
+    """獲取技術分析結果"""
+    try:
+        collector = Layer3Collector()
+        data = collector.get_technical_analysis()
+        return jsonify({
+            'success': True,
+            'data': data
+        })
+    except Exception as e:
+        logger.error(f"技術分析獲取失敗: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/layer3/risk-management')
+def get_risk_management():
+    """獲取風險管理分析"""
+    try:
+        collector = Layer3Collector()
+        data = collector.get_risk_management()
+        return jsonify({
+            'success': True,
+            'data': data
+        })
+    except Exception as e:
+        logger.error(f"風險管理分析失敗: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e)

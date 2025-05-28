@@ -49,4 +49,7 @@ orjson==3.9.10
 
 # 第二層功能依賴
 yfinance==0.2.28
-textblob==0.17.1 
+textblob==0.17.1
+
+# 第三層功能依賴 - 技術分析
+scipy==1.11.4 

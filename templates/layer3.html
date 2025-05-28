@@ -6,15 +6,77 @@
 <div class="row mb-4">
     <div class="col-12 text-center">
         <h2 class="mb-3">
-            <i class="fas fa-chart-bar text-info me-2"></i>
-            第三層：基本面與技術確認
+            <i class="fas fa-chart-bar text-success me-2"></i>
+            第三層：技術確認與風險管理
         </h2>
         <p class="lead text-muted">
             結合基本面和技術分析，確認進出場時機和風險管理
         </p>
-        <div class="alert alert-info" role="alert">
-            <i class="fas fa-info-circle me-2"></i>
-            此功能將在第二層完成後開始開發
+        <div class="mb-4">
+            <button id="collectLayer3Data" class="btn btn-success btn-lg me-3">
+                <i class="fas fa-play me-2"></i>開始分析
+            </button>
+            <button id="refreshLayer3Data" class="btn btn-outline-success btn-lg">
+                <i class="fas fa-sync-alt me-2"></i>重新整理
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 載入狀態 -->
+<div id="loadingLayer3" class="text-center mb-4" style="display: none;">
+    <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">載入中...</span>
+    </div>
+    <p class="mt-2">正在進行技術分析，請稍候...</p>
+</div>
+
+<!-- 摘要卡片 -->
+<div id="summarySection" class="row mb-5" style="display: none;">
+    <div class="col-12">
+        <div class="card border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>
+                    第三層分析摘要
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="text-center">
+                            <h4 id="strongSignals" class="text-success">-</h4>
+                            <p class="small text-muted">強勢信號</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="text-center">
+                            <h4 id="avgConfidence" class="text-info">-</h4>
+                            <p class="small text-muted">平均信心度</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="text-center">
+                            <h4 id="highRiskStocks" class="text-warning">-</h4>
+                            <p class="small text-muted">高風險股票</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="text-center">
+                            <h4 id="successRate" class="text-primary">-</h4>
+                            <p class="small text-muted">成功率</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-success mb-0">
+                            <strong>操作建議：</strong>
+                            <span id="actionAdvice">正在分析中...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -22,22 +84,18 @@
 <div class="row mb-5">
     <div class="col-md-6 mb-4">
         <div class="card h-100">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-success text-white">
                 <h5 class="mb-0">
                     <i class="fas fa-chart-line me-2"></i>
-                    技術分析工具
+                    技術分析
                 </h5>
             </div>
             <div class="card-body">
-                <p class="card-text">專業的技術分析功能：</p>
+                <p class="card-text">深度技術指標分析和交易信號：</p>
                 <ul class="list-unstyled">
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        多時間框架分析
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        技術指標組合
+                        RSI、MACD、布林帶分析
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
@@ -45,53 +103,22 @@
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        型態識別系統
+                        移動平均線趨勢
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        成交量確認信號
                     </li>
                 </ul>
                 <div class="mt-3">
-                    <span class="badge bg-secondary">規劃中</span>
+                    <button class="btn btn-success btn-sm" onclick="loadTechnicalAnalysis()">
+                        <i class="fas fa-chart-line me-1"></i>查看分析
+                    </button>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">
-                    <i class="fas fa-calculator me-2"></i>
-                    基本面評估
-                </h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">深度基本面分析：</p>
-                <ul class="list-unstyled">
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        財務比率分析
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        估值模型計算
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        同業比較分析
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        成長性評估
-                    </li>
-                </ul>
-                <div class="mt-3">
-                    <span class="badge bg-secondary">規劃中</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mb-5">
     <div class="col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-header bg-warning text-white">
@@ -101,196 +128,377 @@
                 </h5>
             </div>
             <div class="card-body">
-                <p class="card-text">完整的風險控制系統：</p>
+                <p class="card-text">全面風險評估和管理建議：</p>
                 <ul class="list-unstyled">
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        部位大小計算
+                        波動率和VaR分析
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        停損停利設定
+                        最大回撤評估
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        風險報酬比分析
+                        Beta值和相關性
                     </li>
                     <li class="mb-2">
                         <i class="fas fa-check text-success me-2"></i>
-                        投資組合風險評估
+                        持倉建議和停損點
                     </li>
                 </ul>
                 <div class="mt-3">
-                    <span class="badge bg-secondary">規劃中</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-header bg-danger text-white">
-                <h5 class="mb-0">
-                    <i class="fas fa-cogs me-2"></i>
-                    選擇權策略
-                </h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">進階選擇權交易工具：</p>
-                <ul class="list-unstyled">
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        隱含波動率分析
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        Greeks 風險指標
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        策略組合建議
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check text-success me-2"></i>
-                        獲利機率計算
-                    </li>
-                </ul>
-                <div class="mt-3">
-                    <span class="badge bg-secondary">規劃中</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mb-5">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">
-                    <i class="fas fa-list-ol me-2"></i>
-                    操作名單生成
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 text-center mb-3">
-                        <div class="mb-3">
-                            <i class="fas fa-filter fa-3x text-primary"></i>
-                        </div>
-                        <h6>多層篩選</h6>
-                        <p class="small text-muted">
-                            結合前兩層的分析結果，進行最終篩選
-                        </p>
-                    </div>
-                    
-                    <div class="col-md-4 text-center mb-3">
-                        <div class="mb-3">
-                            <i class="fas fa-sort-amount-down fa-3x text-success"></i>
-                        </div>
-                        <h6>優先級排序</h6>
-                        <p class="small text-muted">
-                            根據綜合評分對股票進行排序
-                        </p>
-                    </div>
-                    
-                    <div class="col-md-4 text-center mb-3">
-                        <div class="mb-3">
-                            <i class="fas fa-clipboard-list fa-3x text-warning"></i>
-                        </div>
-                        <h6>操作建議</h6>
-                        <p class="small text-muted">
-                            提供具體的進出場時機和策略建議
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-road me-2"></i>
-                    開發路線圖
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <i class="fas fa-chart-line fa-2x text-primary"></i>
-                            </div>
-                            <h6>階段一：技術分析</h6>
-                            <p class="small text-muted">
-                                整合技術指標和圖表分析
-                            </p>
-                            <span class="badge bg-secondary">待開始</span>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3 mb-3">
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <i class="fas fa-calculator fa-2x text-success"></i>
-                            </div>
-                            <h6>階段二：基本面</h6>
-                            <p class="small text-muted">
-                                財務數據分析和估值模型
-                            </p>
-                            <span class="badge bg-secondary">待開始</span>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3 mb-3">
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <i class="fas fa-shield-alt fa-2x text-warning"></i>
-                            </div>
-                            <h6>階段三：風險管理</h6>
-                            <p class="small text-muted">
-                                風險控制和部位管理系統
-                            </p>
-                            <span class="badge bg-secondary">待開始</span>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3 mb-3">
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <i class="fas fa-cogs fa-2x text-danger"></i>
-                            </div>
-                            <h6>階段四：選擇權</h6>
-                            <p class="small text-muted">
-                                選擇權分析和策略工具
-                            </p>
-                            <span class="badge bg-secondary">待開始</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="text-center mt-4">
-                    <div class="alert alert-light" role="alert">
-                        <h6 class="mb-2">
-                            <i class="fas fa-info-circle text-info me-2"></i>
-                            開發順序
-                        </h6>
-                        <p class="mb-0 small">
-                            第三層功能將在第二層完成後開始開發，確保系統的完整性和一致性
-                        </p>
-                    </div>
-                    
-                    <button class="btn btn-outline-secondary" disabled>
-                        <i class="fas fa-lock me-2"></i>
-                        等待前置功能完成
+                    <button class="btn btn-warning btn-sm" onclick="loadRiskManagement()">
+                        <i class="fas fa-shield-alt me-1"></i>風險分析
                     </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- 數據展示區域 -->
+<div id="dataDisplaySection" style="display: none;">
+    <!-- 技術分析 -->
+    <div id="technicalAnalysisSection" class="row mb-5" style="display: none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        技術分析結果
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="technicalAnalysisContent">
+                        <!-- 動態載入內容 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 風險管理 -->
+    <div id="riskManagementSection" class="row mb-5" style="display: none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        風險管理分析
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="riskManagementContent">
+                        <!-- 動態載入內容 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 第三層數據收集
+document.getElementById('collectLayer3Data').addEventListener('click', function() {
+    collectLayer3Data();
+});
+
+document.getElementById('refreshLayer3Data').addEventListener('click', function() {
+    collectLayer3Data();
+});
+
+function collectLayer3Data() {
+    const loadingElement = document.getElementById('loadingLayer3');
+    const summarySection = document.getElementById('summarySection');
+    
+    loadingElement.style.display = 'block';
+    summarySection.style.display = 'none';
+    
+    fetch('/api/layer3/collect', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadingElement.style.display = 'none';
+        
+        if (data.success) {
+            displayLayer3Summary(data.data);
+            showToast('第三層數據收集完成！', 'success');
+        } else {
+            showToast('數據收集失敗：' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        loadingElement.style.display = 'none';
+        console.error('Error:', error);
+        showToast('網路錯誤，請重試', 'error');
+    });
+}
+
+function displayLayer3Summary(data) {
+    const summarySection = document.getElementById('summarySection');
+    
+    // 更新摘要數據
+    document.getElementById('strongSignals').textContent = data.summary.strong_signals || '0';
+    document.getElementById('avgConfidence').textContent = data.summary.avg_confidence + '%' || '-';
+    document.getElementById('highRiskStocks').textContent = data.summary.high_risk_stocks || '0';
+    document.getElementById('successRate').textContent = data.success_rate + '%' || '-';
+    
+    // 生成操作建議
+    const strongSignals = data.summary.strong_signals;
+    const avgConfidence = data.summary.avg_confidence;
+    let advice = '正在分析中...';
+    
+    if (strongSignals >= 2 && avgConfidence >= 70) {
+        advice = '技術面偏多，建議積極操作，注意風險控制';
+    } else if (strongSignals >= 1 && avgConfidence >= 60) {
+        advice = '技術面中性偏多，可適度參與，嚴格停損';
+    } else {
+        advice = '技術面信號不明確，建議觀望為主，等待機會';
+    }
+    
+    document.getElementById('actionAdvice').textContent = advice;
+    
+    summarySection.style.display = 'block';
+}
+
+// 載入各個子功能
+function loadTechnicalAnalysis() {
+    loadSubFunction('/api/layer3/technical-analysis', 'technicalAnalysisSection', 'technicalAnalysisContent', displayTechnicalAnalysis);
+}
+
+function loadRiskManagement() {
+    loadSubFunction('/api/layer3/risk-management', 'riskManagementSection', 'riskManagementContent', displayRiskManagement);
+}
+
+function loadSubFunction(apiUrl, sectionId, contentId, displayFunction) {
+    const section = document.getElementById(sectionId);
+    const content = document.getElementById(contentId);
+    
+    content.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div><p class="mt-2">載入中...</p></div>';
+    section.style.display = 'block';
+    document.getElementById('dataDisplaySection').style.display = 'block';
+    
+    fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            displayFunction(data.data, content);
+        } else {
+            content.innerHTML = '<div class="alert alert-danger">載入失敗：' + data.error + '</div>';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        content.innerHTML = '<div class="alert alert-danger">網路錯誤，請重試</div>';
+    });
+}
+
+// 顯示技術分析結果
+function displayTechnicalAnalysis(data, container) {
+    if (!data.analysis || data.analysis.length === 0) {
+        container.innerHTML = '<div class="alert alert-info">技術分析數據載入中...</div>';
+        return;
+    }
+    
+    let html = '<div class="row">';
+    
+    data.analysis.forEach(stock => {
+        const signalColor = stock.trading_signals.signal_color || 'secondary';
+        const confidence = stock.trading_signals.confidence || 0;
+        
+        // 技術指標顏色
+        const rsi = stock.indicators.rsi || 50;
+        const rsiColor = rsi > 70 ? 'danger' : rsi < 30 ? 'success' : 'warning';
+        
+        const macdHist = stock.indicators.macd?.histogram || 0;
+        const macdColor = macdHist > 0 ? 'success' : 'danger';
+        
+        html += `
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">${stock.symbol}</h6>
+                            <small class="text-muted">${stock.name}</small>
+                        </div>
+                        <span class="badge bg-${signalColor}">${stock.trading_signals.overall_signal}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>$${stock.current_price}</strong>
+                                <br><small class="text-muted">當前價格</small>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="text-${signalColor}">${confidence}%</span>
+                                <br><small class="text-muted">信心度</small>
+                            </div>
+                        </div>
+                        
+                        <!-- 技術指標 -->
+                        <div class="mb-3">
+                            <h6 class="small">技術指標</h6>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="badge bg-${rsiColor}">RSI: ${rsi.toFixed(1)}</span>
+                                </div>
+                                <div class="col-4">
+                                    <span class="badge bg-${macdColor}">MACD: ${macdHist.toFixed(2)}</span>
+                                </div>
+                                <div class="col-4">
+                                    <span class="badge bg-info">布林: ${stock.indicators.bollinger?.position || 'N/A'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 支撐阻力位 -->
+                        <div class="mb-3">
+                            <h6 class="small">關鍵價位</h6>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small><strong>阻力:</strong> ${stock.support_resistance.resistance?.slice(0,2).join(', ') || 'N/A'}</small>
+                                </div>
+                                <div class="col-6">
+                                    <small><strong>支撐:</strong> ${stock.support_resistance.support?.slice(0,2).join(', ') || 'N/A'}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 交易信號 -->
+                        <div>
+                            <h6 class="small">交易信號</h6>
+                            <div class="mt-1">
+                                ${stock.trading_signals.signals.map(signal => `<span class="badge bg-light text-dark me-1 mb-1">${signal}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    
+    // 如果有備註，顯示備註
+    if (data.note) {
+        html += `<div class="alert alert-info mt-3"><i class="fas fa-info-circle me-2"></i>${data.note}</div>`;
+    }
+    
+    container.innerHTML = html;
+}
+
+// 顯示風險管理結果
+function displayRiskManagement(data, container) {
+    if (!data.risk_analysis || data.risk_analysis.length === 0) {
+        container.innerHTML = '<div class="alert alert-info">風險分析數據載入中...</div>';
+        return;
+    }
+    
+    // 投資組合建議
+    let html = `
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-title">投資組合建議</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>分散化：</strong>${data.portfolio_advice.diversification}</p>
+                                <p><strong>持倉規模：</strong>${data.portfolio_advice.position_sizing}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>停損策略：</strong>${data.portfolio_advice.stop_loss}</p>
+                                <p><strong>風險等級：</strong><span class="badge bg-warning">${data.portfolio_advice.risk_level}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 個股風險分析
+    html += '<div class="row">';
+    
+    data.risk_analysis.forEach(stock => {
+        const riskLevel = stock.risk_metrics.risk_level || '中風險';
+        const riskColor = riskLevel === '高風險' ? 'danger' : riskLevel === '低風險' ? 'success' : 'warning';
+        
+        const volatility = stock.risk_metrics.volatility || 0;
+        const maxDrawdown = stock.risk_metrics.max_drawdown || 0;
+        const sharpeRatio = stock.risk_metrics.sharpe_ratio || 0;
+        const beta = stock.risk_metrics.beta || 1;
+        
+        html += `
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">${stock.symbol}</h6>
+                            <small class="text-muted">${stock.name}</small>
+                        </div>
+                        <span class="badge bg-${riskColor}">${riskLevel}</span>
+                    </div>
+                    <div class="card-body">
+                        <!-- 風險指標 -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="text-center">
+                                    <h6 class="text-${volatility > 25 ? 'danger' : 'success'}">${volatility.toFixed(1)}%</h6>
+                                    <small class="text-muted">年化波動率</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center">
+                                    <h6 class="text-${Math.abs(maxDrawdown) > 20 ? 'danger' : 'success'}">${maxDrawdown.toFixed(1)}%</h6>
+                                    <small class="text-muted">最大回撤</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="text-center">
+                                    <h6 class="text-${sharpeRatio > 1 ? 'success' : 'warning'}">${sharpeRatio.toFixed(2)}</h6>
+                                    <small class="text-muted">夏普比率</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center">
+                                    <h6 class="text-${beta > 1.2 ? 'warning' : 'info'}">${beta.toFixed(2)}</h6>
+                                    <small class="text-muted">Beta值</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 風險建議 -->
+                        <div>
+                            <h6 class="small">風險管理建議</h6>
+                            <div class="mt-1">
+                                ${Object.entries(stock.risk_advice).map(([key, value]) => 
+                                    `<p class="small mb-1"><strong>${key === 'position_size' ? '持倉建議' : key === 'stop_loss' ? '停損建議' : '市場風險'}：</strong>${value}</p>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    
+    // 如果有備註，顯示備註
+    if (data.note) {
+        html += `<div class="alert alert-info mt-3"><i class="fas fa-info-circle me-2"></i>${data.note}</div>`;
+    }
+    
+    container.innerHTML = html;
+}
+</script>
 {% endblock %}
