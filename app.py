@@ -65,6 +65,9 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'message': '四層聯動美股投資分析系統運行正常',
+        'version': '2.0.0',
+        'stage': 'Complete Four-Layer Analysis System',
+        'features': ['市場總觀分析', '產業催化劑分析', '精選操作名單', '選擇權策略建議'],
         'timestamp': datetime.now().isoformat()
     })
 
