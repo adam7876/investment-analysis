@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}整合投資分析 - 三層聯動系統{% endblock %}
+{% block title %}整合投資分析 - 四層聯動系統{% endblock %}
 
 {% block content %}
 <div class="container-fluid mt-4">
@@ -12,14 +12,44 @@
                     <h2 class="mb-0">
                         <i class="fas fa-rocket me-2"></i>
                         整合投資分析系統
-                        <small class="float-end">三層聯動 · 一鍵分析</small>
+                        <small class="float-end">四層聯動 · 一鍵分析</small>
                     </h2>
                 </div>
                 <div class="card-body">
                     <p class="lead mb-0">
                         <i class="fas fa-info-circle text-info me-2"></i>
-                        基於總經環境自動選股，無需手動操作每一層級。系統將自動執行三層分析並提供最終投資建議。
+                        基於市場總觀→產業分析→精選個股→選擇權策略的四層聯動分析架構，提供完整投資決策支援。
                     </p>
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-globe-americas fa-2x text-primary mb-2"></i>
+                                <h6>第一層：市場總觀</h6>
+                                <small class="text-muted">總經環境 + 市場情緒</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-industry fa-2x text-success mb-2"></i>
+                                <h6>第二層：產業分析</h6>
+                                <small class="text-muted">重點產業 + 催化劑</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-bullseye fa-2x text-warning mb-2"></i>
+                                <h6>第三層：精選個股</h6>
+                                <small class="text-muted">操作名單 + 進場理由</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+                                <h6>第四層：選擇權策略</h6>
+                                <small class="text-muted">策略建議 + 風險管理</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,7 +94,7 @@
                         <div class="col-12 text-center">
                             <button class="btn btn-primary btn-lg" onclick="startIntegratedAnalysis()">
                                 <i class="fas fa-play me-2"></i>
-                                開始三層聯動分析
+                                開始四層聯動分析
                             </button>
                         </div>
                     </div>
@@ -130,16 +160,16 @@
             </div>
         </div>
 
-        <!-- 三層分析詳情 -->
+        <!-- 四層分析詳情 -->
         <div class="col-12">
             <div class="accordion" id="analysisAccordion">
-                <!-- 第一層：總經環境 -->
+                <!-- 第一層：市場總觀 -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="layer1Header">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" 
                                 data-bs-target="#layer1Collapse">
                             <i class="fas fa-globe me-2"></i>
-                            第一層：總經環境分析
+                            第一層：市場總觀分析
                         </button>
                     </h2>
                     <div id="layer1Collapse" class="accordion-collapse collapse show" 
@@ -150,13 +180,13 @@
                     </div>
                 </div>
 
-                <!-- 第二層：策略選股 -->
+                <!-- 第二層：產業分析 -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="layer2Header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
                                 data-bs-target="#layer2Collapse">
-                            <i class="fas fa-filter me-2"></i>
-                            第二層：策略選股分析
+                            <i class="fas fa-industry me-2"></i>
+                            第二層：產業分析
                         </button>
                     </h2>
                     <div id="layer2Collapse" class="accordion-collapse collapse" 
@@ -167,18 +197,35 @@
                     </div>
                 </div>
 
-                <!-- 第三層：技術確認 -->
+                <!-- 第三層：精選個股 -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="layer3Header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
                                 data-bs-target="#layer3Collapse">
-                            <i class="fas fa-chart-bar me-2"></i>
-                            第三層：技術確認分析
+                            <i class="fas fa-bullseye me-2"></i>
+                            第三層：精選個股分析
                         </button>
                     </h2>
                     <div id="layer3Collapse" class="accordion-collapse collapse" 
                          data-bs-parent="#analysisAccordion">
                         <div class="accordion-body" id="layer3Details">
+                            <!-- 動態內容 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第四層：選擇權策略 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="layer4Header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#layer4Collapse">
+                            <i class="fas fa-chart-line me-2"></i>
+                            第四層：選擇權策略分析
+                        </button>
+                    </h2>
+                    <div id="layer4Collapse" class="accordion-collapse collapse" 
+                         data-bs-parent="#analysisAccordion">
+                        <div class="accordion-body" id="layer4Details">
                             <!-- 動態內容 -->
                         </div>
                     </div>
@@ -234,7 +281,7 @@ function startIntegratedAnalysis() {
     analysisInProgress = true;
     
     // 模擬進度更新
-    updateProgress(10, '正在分析總經環境...');
+    updateProgress(10, '正在分析市場總觀...');
     
     // 發送分析請求
     fetch('/api/integrated-analysis', {
@@ -245,11 +292,11 @@ function startIntegratedAnalysis() {
         body: JSON.stringify(userPreferences)
     })
     .then(response => {
-        updateProgress(50, '正在進行動態選股...');
+        updateProgress(50, '正在進行產業分析...');
         return response.json();
     })
     .then(data => {
-        updateProgress(80, '正在進行技術確認...');
+        updateProgress(80, '正在進行精選個股分析...');
         
         setTimeout(() => {
             updateProgress(100, '分析完成！');
@@ -259,7 +306,7 @@ function startIntegratedAnalysis() {
                 document.getElementById('progressSection').style.display = 'none';
                 
                 if (data.success) {
-                    displayResults(data);
+                    displayAnalysisResults(data);
                 } else {
                     displayError(data.message || data.error || '分析失敗');
                 }
@@ -283,23 +330,24 @@ function updateProgress(percentage, text) {
     progressText.textContent = text;
 }
 
-function displayResults(data) {
+function displayAnalysisResults(data) {
     // 顯示結果區域
     document.getElementById('resultsSection').style.display = 'block';
     
     // 顯示執行摘要
-    displayExecutiveSummary(data.summary, data.investment_strategy);
+    displayExecutiveSummary(data.executive_summary);
     
     // 顯示推薦股票
     displayRecommendedStocks(data.final_recommendations.top_picks);
     
-    // 顯示三層分析詳情
-    displayLayer1Details(data.layer1_analysis);
-    displayLayer2Details(data.layer2_analysis);
-    displayLayer3Details(data.layer3_analysis);
+    // 顯示四層分析詳情
+    displayLayer1Details(data.layer1_market_overview);
+    displayLayer2Details(data.layer2_sector_analysis);
+    displayLayer3Details(data.layer3_trading_watchlist);
+    displayLayer4Details(data.layer4_options_strategies);
 }
 
-function displayExecutiveSummary(summary, strategy) {
+function displayExecutiveSummary(summary) {
     const container = document.getElementById('executiveSummary');
     
     container.innerHTML = `
@@ -317,7 +365,7 @@ function displayExecutiveSummary(summary, strategy) {
                 <p class="text-muted">平均信心度</p>
             </div>
             <div class="col-md-3 text-center">
-                <h3 class="text-warning">${strategy.primary_focus}</h3>
+                <h3 class="text-warning">${summary.primary_focus}</h3>
                 <p class="text-muted">投資策略</p>
             </div>
         </div>
@@ -347,15 +395,21 @@ function displayRecommendedStocks(stocks) {
     const container = document.getElementById('recommendedStocks');
     
     if (!stocks || stocks.length === 0) {
-        container.innerHTML = '<p class="text-muted">暫無推薦股票</p>';
+        container.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>暫無推薦股票，可能是因為：<ul class="mt-2 mb-0"><li>當前市場條件不適合投資</li><li>沒有股票通過嚴格的篩選條件</li><li>技術分析顯示風險過高</li></ul></div>';
         return;
     }
     
     let html = '<div class="row">';
     
     stocks.forEach((stock, index) => {
-        const signalClass = getSignalClass(stock.trading_signal?.signal);
-        const confidenceColor = getConfidenceColor(stock.trading_signal?.confidence || 0);
+        // 使用新的數據結構
+        const recommendation = stock.investment_recommendation?.recommendation || '觀望';
+        const confidence = stock.confidence_level || stock.investment_recommendation?.confidence_level || 0;
+        const finalRating = stock.final_rating || stock.total_score || 0;
+        const technicalScore = stock.technical_score || 0;
+        
+        const signalClass = getSignalClass(recommendation);
+        const confidenceColor = getConfidenceColor(confidence);
         
         html += `
             <div class="col-md-6 col-lg-4 mb-3">
@@ -363,29 +417,101 @@ function displayRecommendedStocks(stocks) {
                     <div class="card-header bg-${signalClass} text-white">
                         <h6 class="mb-0">
                             #${index + 1} ${stock.symbol}
-                            <span class="float-end badge bg-light text-dark">${stock.total_score}</span>
+                            <span class="float-end badge bg-light text-dark">${finalRating}分</span>
                         </h6>
                     </div>
                     <div class="card-body">
                         <h6 class="card-title">${stock.name}</h6>
                         <p class="card-text">
-                            <strong>當前價格:</strong> $${stock.current_price}<br>
+                            <strong>當前價格:</strong> $${stock.price_targets?.current_price || stock.current_price}<br>
                             <strong>市值:</strong> ${stock.market_cap_formatted}<br>
                             <strong>產業:</strong> ${stock.sector}
                         </p>
+                        
+                        ${stock.price_targets ? `
+                            <div class="price-targets mb-2">
+                                <small><strong>目標價:</strong> $${stock.price_targets.conservative_target}</small><br>
+                                <small><strong>停損點:</strong> $${stock.price_targets.stop_loss}</small><br>
+                                <small><strong>風險報酬比:</strong> ${stock.price_targets.risk_reward_ratio}</small>
+                            </div>
+                        ` : ''}
+                        
                         <div class="mb-2">
-                            <strong>交易信號:</strong> 
-                            <span class="badge bg-${signalClass}">${stock.trading_signal?.signal || '觀望'}</span>
+                            <strong>投資建議:</strong> 
+                            <span class="badge bg-${signalClass}">${recommendation}</span>
                         </div>
+                        
+                        <div class="mb-2">
+                            <strong>技術評分:</strong> ${technicalScore}分
+                            ${stock.technical_signals?.trend ? `
+                                <br><small>趨勢: ${stock.technical_signals.trend.direction} (${stock.technical_signals.trend.strength})</small>
+                            ` : ''}
+                        </div>
+                        
+                        ${stock.risk_assessment ? `
+                            <div class="mb-2">
+                                <strong>風險等級:</strong> 
+                                <span class="badge badge-${stock.risk_assessment.risk_level === '低' ? 'success' : stock.risk_assessment.risk_level === '中' ? 'warning' : 'danger'}">${stock.risk_assessment.risk_level}</span>
+                            </div>
+                        ` : ''}
+                        
                         <div class="progress mb-2" style="height: 20px;">
                             <div class="progress-bar bg-${confidenceColor}" 
-                                 style="width: ${stock.trading_signal?.confidence || 0}%">
-                                信心度 ${stock.trading_signal?.confidence || 0}%
+                                 style="width: ${confidence}%">
+                                信心度 ${confidence}%
                             </div>
                         </div>
-                        <small class="text-muted">
-                            ${stock.selection_reasons?.slice(0, 2).join(', ') || '基於綜合評分選出'}
-                        </small>
+                        
+                        ${stock.investment_recommendation?.reasons ? `
+                            <div class="recommendation-reasons">
+                                <small class="text-muted">
+                                    <strong>推薦理由:</strong><br>
+                                    ${stock.investment_recommendation.reasons.slice(0, 2).map(reason => `• ${reason}`).join('<br>')}
+                                </small>
+                            </div>
+                        ` : `
+                            <small class="text-muted">
+                                ${stock.selection_reasons?.slice(0, 2).join(', ') || '基於綜合評分選出'}
+                            </small>
+                        `}
+                        
+                        ${stock.entry_timing ? `
+                            <div class="entry-timing mt-2">
+                                <small><strong>進場時機:</strong> ${stock.entry_timing.timing_rating}</small>
+                                <br><small><strong>建議行動:</strong> ${stock.entry_timing.suggested_action}</small>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-outline-primary" type="button" data-toggle="collapse" data-target="#details-${stock.symbol}" aria-expanded="false">
+                            查看詳細分析
+                        </button>
+                        <div class="collapse mt-2" id="details-${stock.symbol}">
+                            <div class="card card-body">
+                                ${stock.detailed_technical_analysis ? `
+                                    <h6>技術分析詳情</h6>
+                                    <p><strong>趨勢分析:</strong> ${stock.detailed_technical_analysis.trend_analysis?.ma_analysis || '趨勢分析中'}</p>
+                                    <p><strong>動能分析:</strong> RSI ${stock.detailed_technical_analysis.momentum_analysis?.rsi_analysis?.current_level || 'N/A'} (${stock.detailed_technical_analysis.momentum_analysis?.rsi_analysis?.interpretation || '中性'})</p>
+                                    <p><strong>支撐阻力:</strong> ${stock.detailed_technical_analysis.support_resistance?.current_position || '中性區'}</p>
+                                    <p><strong>風險評估:</strong> ${stock.detailed_technical_analysis.risk_level || '中等風險'}</p>
+                                    <p><strong>建議持有期:</strong> ${stock.detailed_technical_analysis.time_horizon || '1-3個月'}</p>
+                                ` : ''}
+                                
+                                ${stock.risk_assessment?.risk_factors ? `
+                                    <h6>風險因素</h6>
+                                    <ul class="list-unstyled">
+                                        ${stock.risk_assessment.risk_factors.map(risk => `<li><i class="fas fa-exclamation-triangle text-warning me-1"></i> ${risk}</li>`).join('')}
+                                    </ul>
+                                ` : ''}
+                                
+                                ${stock.risk_assessment?.mitigation_strategies ? `
+                                    <h6>風險緩解策略</h6>
+                                    <ul class="list-unstyled">
+                                        ${stock.risk_assessment.mitigation_strategies.map(strategy => `<li><i class="fas fa-shield-alt text-success me-1"></i> ${strategy}</li>`).join('')}
+                                    </ul>
+                                ` : ''}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -401,24 +527,36 @@ function displayLayer1Details(layer1) {
     
     container.innerHTML = `
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h6><i class="fas fa-heart-pulse me-2"></i>市場情緒</h6>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h4 class="text-center">${layer1.market_sentiment.fear_greed_index}</h4>
-                        <p class="text-center text-muted">${layer1.market_sentiment.sentiment_label}</p>
-                        <p class="small">${layer1.market_sentiment.interpretation}</p>
+                        <h4 class="text-center">${layer1.market_sentiment?.fear_greed_index || 50}</h4>
+                        <p class="text-center text-muted">${layer1.market_sentiment?.sentiment_label || '中性'}</p>
+                        <p class="small">${layer1.market_sentiment?.overall_sentiment || '市場情緒穩定'}</p>
+                        <p class="small"><strong>VIX分析:</strong> ${layer1.market_sentiment?.vix_analysis || 'VIX正常水平'}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <h6><i class="fas fa-chart-line me-2"></i>經濟指標</h6>
+            <div class="col-md-4">
+                <h6><i class="fas fa-chart-line me-2"></i>經濟環境</h6>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <p><strong>GDP成長:</strong> ${layer1.economic_indicators.gdp_growth}%</p>
-                        <p><strong>失業率:</strong> ${layer1.economic_indicators.unemployment_rate}%</p>
-                        <p><strong>通膨率:</strong> ${layer1.economic_indicators.inflation_rate}%</p>
-                        <p><strong>經濟健康度:</strong> ${layer1.economic_indicators.economic_health}</p>
+                        <p><strong>GDP成長:</strong> ${layer1.economic_environment?.gdp_growth || 2.0}%</p>
+                        <p><strong>失業率:</strong> ${layer1.economic_environment?.unemployment_rate || 4.0}%</p>
+                        <p><strong>通膨率:</strong> ${layer1.economic_environment?.inflation_rate || 3.0}%</p>
+                        <p><strong>利率環境:</strong> ${layer1.economic_environment?.interest_rates || '維持高位'}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="fas fa-exchange-alt me-2"></i>資金流向</h6>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p><strong>整體流向:</strong> ${layer1.capital_flows?.overall_flow || '平衡'}</p>
+                        <p><strong>流向強度:</strong> ${layer1.capital_flows?.flow_strength || '溫和'}</p>
+                        <p><strong>機構資金:</strong> ${layer1.capital_flows?.institutional_flows || '持續流入'}</p>
+                        <p><strong>產業輪動:</strong> ${layer1.capital_flows?.sector_rotation || '科技→價值'}</p>
                     </div>
                 </div>
             </div>
@@ -426,9 +564,13 @@ function displayLayer1Details(layer1) {
         <div class="row">
             <div class="col-12">
                 <div class="alert alert-info">
-                    <strong>市場階段:</strong> ${layer1.market_phase} | 
-                    <strong>風險偏好:</strong> ${layer1.risk_appetite} | 
-                    <strong>投資環境:</strong> ${layer1.investment_environment}
+                    <strong>市場階段:</strong> ${layer1.market_phase?.phase || '盤整期'} | 
+                    <strong>趨勢方向:</strong> ${layer1.market_phase?.trend || '震盪'} | 
+                    <strong>風險等級:</strong> ${layer1.market_phase?.risk_level || '中等'} |
+                    <strong>信心度:</strong> ${layer1.confidence_level || 75}%
+                </div>
+                <div class="mt-2">
+                    <strong>關鍵風險:</strong> ${(layer1.key_risks || ['市場波動', '政策不確定性']).join(', ')}
                 </div>
             </div>
         </div>
@@ -441,27 +583,37 @@ function displayLayer2Details(layer2) {
     container.innerHTML = `
         <div class="row">
             <div class="col-md-6">
-                <h6><i class="fas fa-strategy me-2"></i>選股策略</h6>
-                <p><strong>策略類型:</strong> ${layer2.strategy_applied}</p>
-                <p><strong>篩選股票數:</strong> ${layer2.total_screened}</p>
-                <p><strong>通過篩選:</strong> ${layer2.selected_stocks?.length || 0}</p>
+                <h6><i class="fas fa-industry me-2"></i>重點產業</h6>
+                <div class="mb-3">
+                    ${(layer2.focus_sectors || []).map(sector => `
+                        <div class="card mb-2">
+                            <div class="card-body py-2">
+                                <strong>${sector.sector || sector}</strong>
+                                <span class="badge bg-success float-end">${sector.confidence || 85}%</span>
+                                <br><small class="text-muted">${sector.reason || '表現優異'}</small>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
             <div class="col-md-6">
-                <h6><i class="fas fa-industry me-2"></i>產業分布</h6>
-                <div>
-                    ${Object.entries(layer2.sector_distribution || {}).map(([sector, count]) => 
-                        `<span class="badge bg-primary me-2">${sector}: ${count}</span>`
-                    ).join('')}
+                <h6><i class="fas fa-rocket me-2"></i>市場催化劑</h6>
+                <div class="mb-3">
+                    ${(layer2.market_catalysts?.upcoming_events || ['財報季', 'AI技術突破', '政策利多']).map(event => `
+                        <div class="alert alert-warning py-2 mb-2">
+                            <i class="fas fa-calendar me-2"></i>${event}
+                        </div>
+                    `).join('')}
                 </div>
             </div>
         </div>
-        <div class="row mt-3">
+        <div class="row">
             <div class="col-12">
-                <h6><i class="fas fa-filter me-2"></i>篩選條件</h6>
-                <div class="card">
-                    <div class="card-body">
-                        <pre class="small">${JSON.stringify(layer2.screening_criteria, null, 2)}</pre>
-                    </div>
+                <h6><i class="fas fa-lightbulb me-2"></i>投資主題</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    ${(layer2.investment_themes || ['AI人工智慧', '能源轉型', '數位化轉型']).map(theme => `
+                        <span class="badge bg-primary">${theme}</span>
+                    `).join('')}
                 </div>
             </div>
         </div>
@@ -474,44 +626,132 @@ function displayLayer3Details(layer3) {
     container.innerHTML = `
         <div class="row">
             <div class="col-md-4">
-                <h6><i class="fas fa-chart-bar me-2"></i>技術分析</h6>
-                <p>${layer3.technical_summary?.summary || '已完成技術指標分析'}</p>
+                <h6><i class="fas fa-bullseye me-2"></i>觀察名單</h6>
+                <p>${layer3.watchlist_summary || '精選優質標的'}</p>
+                <p><strong>總數:</strong> ${(layer3.watchlist || []).length}支</p>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="fas fa-chart-pie me-2"></i>產業配置</h6>
+                <div>
+                    ${Object.entries(layer3.sector_allocation || {}).map(([sector, count]) => 
+                        `<span class="badge bg-secondary me-1">${sector}: ${count}</span>`
+                    ).join('')}
+                </div>
             </div>
             <div class="col-md-4">
                 <h6><i class="fas fa-shield-alt me-2"></i>風險評估</h6>
-                <p>${layer3.risk_assessment?.assessment || '整體風險可控'}</p>
-            </div>
-            <div class="col-md-4">
-                <h6><i class="fas fa-briefcase me-2"></i>組合建議</h6>
-                <p>${layer3.portfolio_suggestions?.suggestion || '建議分散投資'}</p>
+                <p><strong>整體風險:</strong> ${layer3.risk_assessment || '中等'}</p>
+                <p><strong>執行計劃:</strong> ${layer3.execution_plan?.['分批進場'] || '分批建倉'}</p>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-12">
-                <h6><i class="fas fa-list me-2"></i>確認股票清單</h6>
+                <h6><i class="fas fa-list me-2"></i>精選股票清單</h6>
                 <div class="table-responsive">
                     <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>股票</th>
-                                <th>信號</th>
-                                <th>信心度</th>
+                                <th>產業</th>
+                                <th>評分</th>
+                                <th>交易策略</th>
                                 <th>目標價</th>
-                                <th>停損價</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${(layer3.confirmed_stocks || []).map(stock => `
+                            ${(layer3.watchlist || []).map(stock => `
                                 <tr>
-                                    <td>${stock.symbol}</td>
-                                    <td><span class="badge bg-${getSignalClass(stock.trading_signal?.signal)}">${stock.trading_signal?.signal || '觀望'}</span></td>
-                                    <td>${stock.trading_signal?.confidence || 0}%</td>
-                                    <td>$${stock.final_recommendation?.target_price?.toFixed(2) || 'N/A'}</td>
-                                    <td>$${stock.final_recommendation?.stop_loss?.toFixed(2) || 'N/A'}</td>
+                                    <td><strong>${stock.symbol}</strong><br><small>${stock.name}</small></td>
+                                    <td>${stock.sector}</td>
+                                    <td><span class="badge bg-${stock.total_score > 80 ? 'success' : stock.total_score > 60 ? 'warning' : 'secondary'}">${stock.total_score}</span></td>
+                                    <td>${stock.trading_strategy?.entry_price || '待定'}</td>
+                                    <td>${stock.trading_strategy?.target_price || 'N/A'}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function displayLayer4Details(layer4) {
+    const container = document.getElementById('layer4Details');
+    
+    container.innerHTML = `
+        <div class="row">
+            <div class="col-md-4">
+                <h6><i class="fas fa-chart-bar me-2"></i>波動率環境</h6>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p><strong>VIX水平:</strong> ${layer4.volatility_environment?.vix_level || 20.5}</p>
+                        <p><strong>環境評估:</strong> ${layer4.volatility_environment?.environment || '中等波動'}</p>
+                        <p><strong>策略偏好:</strong> ${layer4.volatility_environment?.strategy_preference || '方向性策略'}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="fas fa-cogs me-2"></i>推薦策略</h6>
+                <div class="mb-3">
+                    ${(layer4.recommended_strategies || []).slice(0, 3).map(strategy => `
+                        <div class="card mb-2">
+                            <div class="card-body py-2">
+                                <strong>${strategy.strategy}</strong>
+                                <span class="badge bg-info float-end">${strategy.expected_return || 20}%</span>
+                                <br><small class="text-muted">${strategy.rationale || '適合當前市況'}</small>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="fas fa-shield-alt me-2"></i>風險管理</h6>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p><strong>最大風險:</strong> ${layer4.risk_management?.max_risk || '投入資金的5%'}</p>
+                        <p><strong>部位控制:</strong> ${layer4.risk_management?.position_sizing || '單一策略不超過總資金10%'}</p>
+                        <p><strong>監控頻率:</strong> ${layer4.risk_management?.monitoring || '每日檢視'}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <h6><i class="fas fa-list-alt me-2"></i>策略詳情</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>策略類型</th>
+                                <th>標的</th>
+                                <th>最大獲利</th>
+                                <th>最大虧損</th>
+                                <th>預期報酬</th>
+                                <th>風險等級</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${(layer4.recommended_strategies || []).map(strategy => `
+                                <tr>
+                                    <td><strong>${strategy.strategy}</strong></td>
+                                    <td>${strategy.underlying || 'SPY'}</td>
+                                    <td class="text-success">${strategy.max_profit || '無限'}</td>
+                                    <td class="text-danger">${strategy.max_loss || '$500'}</td>
+                                    <td><span class="badge bg-primary">${strategy.expected_return || 20}%</span></td>
+                                    <td><span class="badge bg-${strategy.risk_level === '低' ? 'success' : strategy.risk_level === '中' ? 'warning' : 'danger'}">${strategy.risk_level || '中等'}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-graduation-cap me-2"></i>選擇權教育提醒</h6>
+                    <p class="mb-0">${layer4.educational_notes?.risk_warning || '選擇權交易具有高風險，請確保充分了解相關風險後再進行交易。建議先進行模擬交易練習。'}</p>
                 </div>
             </div>
         </div>

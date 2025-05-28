@@ -10,12 +10,38 @@ import json
 import threading
 import time
 import os
+import numpy as np
 from loguru import logger
+import pandas as pd
 
 from layer1_collector import Layer1Collector
 from layer2_collector import Layer2Collector
 from layer3_collector import Layer3Collector
 from integrated_analyzer import IntegratedAnalyzer
+
+# JSON序列化輔助函數
+def convert_numpy_types(obj):
+    """將numpy類型轉換為Python原生類型以便JSON序列化"""
+    if isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, pd.Series):
+        return obj.tolist()
+    elif isinstance(obj, pd.DataFrame):
+        return obj.to_dict('records')
+    elif isinstance(obj, pd.Timestamp):
+        return obj.isoformat()
+    elif isinstance(obj, dict):
+        return {key: convert_numpy_types(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_types(item) for item in obj]
+    elif hasattr(obj, 'item'):  # 處理numpy標量
+        return obj.item()
+    else:
+        return obj
 
 app = Flask(__name__)
 
@@ -319,15 +345,18 @@ def get_risk_management():
 
 @app.route('/api/integrated-analysis', methods=['POST'])
 def integrated_analysis():
-    """整合三層分析API"""
+    """整合四層分析API"""
     try:
         # 獲取用戶偏好（如果有的話）
         user_preferences = request.get_json() if request.is_json else {}
         
-        logger.info("🚀 開始執行整合三層分析...")
+        logger.info("🚀 開始執行整合四層分析...")
         
-        # 執行完整的三層聯動分析
+        # 執行完整的四層聯動分析
         result = integrated_analyzer.analyze_complete_flow(user_preferences)
+        
+        # 轉換numpy類型以便JSON序列化
+        result = convert_numpy_types(result)
         
         if result.get('success'):
             logger.info("✅ 整合分析完成")
