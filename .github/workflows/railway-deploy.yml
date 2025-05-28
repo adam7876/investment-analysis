@@ -1,0 +1,32 @@
+name: 🚀 Railway Auto Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 允許手動觸發
+
+jobs:
+  deploy:
+    name: 部署到Railway
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 檢出代碼
+        uses: actions/checkout@v4
+        
+      - name: 🚂 安裝Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          echo "$HOME/.railway/bin" >> $GITHUB_PATH
+          
+      - name: 🚀 部署到Railway
+        run: |
+          railway up --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          
+      - name: ✅ 部署完成通知
+        run: |
+          echo "🎉 部署完成！"
+          echo "📱 網站地址: https://web-production-9cc8f.up.railway.app"
+          echo "⏰ 部署時間: $(date)" 
