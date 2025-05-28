@@ -312,6 +312,26 @@
     </div>
 </div>
 
+<!-- 調試區域（開發用） -->
+<div class="row mt-5" id="debugSection" style="display: none;">
+    <div class="col-12">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-bug me-2"></i>
+                    調試資訊
+                    <button class="btn btn-sm btn-outline-light float-end" onclick="toggleDebug()">
+                        隱藏/顯示
+                    </button>
+                </h6>
+            </div>
+            <div class="card-body">
+                <pre id="debugContent" class="small bg-light p-3" style="max-height: 300px; overflow-y: auto;"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 // 第二層數據收集
 document.getElementById('collectLayer2Data').addEventListener('click', function() {
@@ -401,22 +421,59 @@ function loadSubFunction(apiUrl, sectionId, contentId, displayFunction) {
     const section = document.getElementById(sectionId);
     const content = document.getElementById(contentId);
     
-    content.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div><p class="mt-2">載入中...</p></div>';
+    // 顯示載入狀態
+    content.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">載入中...</p></div>';
     section.style.display = 'block';
     document.getElementById('dataDisplaySection').style.display = 'block';
     
+    // 設置超時處理
+    const timeoutId = setTimeout(() => {
+        content.innerHTML = '<div class="alert alert-warning">載入超時，請重試</div>';
+    }, 30000); // 30秒超時
+    
     fetch(apiUrl)
-    .then(response => response.json())
+    .then(response => {
+        clearTimeout(timeoutId);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.success) {
+        console.log('API Response:', data); // 調試用
+        
+        // 顯示調試資訊
+        if (typeof showDebugInfo === 'function') {
+            showDebugInfo(apiUrl, data);
+        }
+        
+        if (data.success && data.data) {
             displayFunction(data.data, content);
+        } else if (data.success) {
+            // 處理沒有data欄位但成功的情況
+            displayFunction(data, content);
         } else {
-            content.innerHTML = '<div class="alert alert-danger">載入失敗：' + data.error + '</div>';
+            content.innerHTML = '<div class="alert alert-danger">載入失敗：' + (data.error || '未知錯誤') + '</div>';
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        content.innerHTML = '<div class="alert alert-danger">網路錯誤，請重試</div>';
+        clearTimeout(timeoutId);
+        console.error('API Error:', error);
+        
+        // 顯示調試資訊
+        if (typeof showDebugInfo === 'function') {
+            showDebugInfo(apiUrl, { error: error.message, stack: error.stack });
+        }
+        
+        content.innerHTML = `
+            <div class="alert alert-danger">
+                <h6>載入失敗</h6>
+                <p>錯誤：${error.message}</p>
+                <button class="btn btn-sm btn-outline-danger" onclick="loadSubFunction('${apiUrl}', '${sectionId}', '${contentId}', ${displayFunction.name})">
+                    <i class="fas fa-redo me-1"></i>重試
+                </button>
+            </div>
+        `;
     });
 }
 
@@ -473,14 +530,32 @@ function displayNewsSentiment(data, container) {
         html += '<h6>最新新聞分析：</h6>';
         data.news.slice(0, 5).forEach(news => {
             const sentimentClass = news.sentiment === '正面' ? 'success' : news.sentiment === '負面' ? 'danger' : 'warning';
+            const hasValidUrl = news.url && news.url !== '#' && news.url !== '';
+            
             html += `
                 <div class="card mb-2">
                     <div class="card-body">
-                        <h6 class="card-title">${news.title}</h6>
+                        ${hasValidUrl ? 
+                            `<h6 class="card-title">
+                                <a href="${news.url}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                    ${news.title}
+                                    <i class="fas fa-external-link-alt ms-1 small"></i>
+                                </a>
+                            </h6>` :
+                            `<h6 class="card-title">${news.title}</h6>`
+                        }
                         <p class="card-text small">${news.summary}</p>
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between align-items-center">
                             <span class="badge bg-${sentimentClass}">${news.sentiment}</span>
-                            <small class="text-muted">${news.ticker}</small>
+                            <div class="d-flex align-items-center">
+                                <small class="text-muted me-2">${news.ticker}</small>
+                                ${hasValidUrl ? 
+                                    `<a href="${news.url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-external-link-alt me-1"></i>閱讀全文
+                                    </a>` : 
+                                    ''
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -658,5 +733,39 @@ function displayStockScreener(data, container) {
     
     container.innerHTML = html;
 }
+
+// 調試功能
+function toggleDebug() {
+    const debugSection = document.getElementById('debugSection');
+    debugSection.style.display = debugSection.style.display === 'none' ? 'block' : 'none';
+}
+
+// 顯示調試資訊
+function showDebugInfo(apiUrl, data) {
+    const debugContent = document.getElementById('debugContent');
+    const debugInfo = {
+        timestamp: new Date().toISOString(),
+        api_url: apiUrl,
+        response: data
+    };
+    debugContent.textContent = JSON.stringify(debugInfo, null, 2);
+    document.getElementById('debugSection').style.display = 'block';
+}
+
+// 在頁面載入時顯示調試按鈕
+document.addEventListener('DOMContentLoaded', function() {
+    // 添加調試按鈕到頁面標題
+    const titleSection = document.querySelector('.row.mb-4 .col-12');
+    if (titleSection) {
+        const debugBtn = document.createElement('button');
+        debugBtn.className = 'btn btn-sm btn-outline-info position-absolute';
+        debugBtn.style.top = '10px';
+        debugBtn.style.right = '10px';
+        debugBtn.innerHTML = '<i class="fas fa-bug me-1"></i>調試';
+        debugBtn.onclick = toggleDebug;
+        titleSection.style.position = 'relative';
+        titleSection.appendChild(debugBtn);
+    }
+});
 </script>
 {% endblock %} 
