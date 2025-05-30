@@ -2,10 +2,10 @@
 nixPkgs = ['python311', 'python311Packages.pip']
 
 [phases.install]
-cmds = ['pip install --upgrade pip setuptools wheel', 'pip install -r requirements.txt']
+cmds = ['pip install --upgrade pip', 'pip install -r requirements-ultra-minimal.txt']
 
 [phases.build]
-cmds = ['echo "Build completed"']
+cmds = ['echo "Ultra minimal build completed"']
 
 [start]
-cmd = 'python3 simple_app.py' 
+cmd = 'python3 ultra_minimal_app.py' 
