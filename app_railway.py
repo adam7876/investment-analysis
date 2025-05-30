@@ -186,7 +186,179 @@ INDEX_HTML = """
         function showResult(elementId, data) {
             const element = document.getElementById(elementId);
             element.style.display = 'block';
-            element.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            
+            if (elementId === 'complete-result' && data.success) {
+                // 格式化完整四層分析結果
+                element.innerHTML = formatCompleteAnalysis(data);
+            } else {
+                // 格式化其他結果
+                element.innerHTML = formatSimpleResult(data);
+            }
+        }
+
+        function formatCompleteAnalysis(data) {
+            let html = '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; line-height: 1.6;">';
+            
+            // 第一層：市場總觀
+            html += '<h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">📊 第一層：市場總觀趨勢</h3>';
+            const layer1 = data.layer1_market_overview;
+            html += `<div style="margin: 15px 0; padding: 15px; background: #e8f5e8; border-radius: 5px;">`;
+            html += `<p><strong>🎯 市場情緒：</strong>${layer1.market_sentiment.sentiment} (${layer1.market_sentiment.fear_greed_index})</p>`;
+            html += `<p><strong>📈 經濟指標：</strong></p>`;
+            html += `<ul style="margin: 10px 0; padding-left: 20px;">`;
+            html += `<li>GDP成長率：${layer1.economic_indicators.gdp_growth}%</li>`;
+            html += `<li>通膨率：${layer1.economic_indicators.inflation_rate}%</li>`;
+            html += `<li>失業率：${layer1.economic_indicators.unemployment_rate}%</li>`;
+            html += `<li>聯準會利率：${layer1.economic_indicators.fed_rate}%</li>`;
+            html += `</ul>`;
+            html += `<p><strong>💡 市場趨勢：</strong>${layer1.market_trend}</p>`;
+            html += `</div>`;
+
+            // 第二層：產業分析
+            html += '<h3 style="color: #2c3e50; border-bottom: 2px solid #e74c3c; padding-bottom: 10px;">🏭 第二層：產業催化劑分析</h3>';
+            const layer2 = data.layer2_sector_analysis;
+            html += `<div style="margin: 15px 0; padding: 15px; background: #fef9e7; border-radius: 5px;">`;
+            html += `<p><strong>🎯 重點觀察產業：</strong></p>`;
+            html += `<ul style="margin: 10px 0; padding-left: 20px;">`;
+            layer2.focus_sectors.forEach(sector => {
+                html += `<li><strong>${sector.sector}</strong> (強度: ${sector.strength}/10)<br>`;
+                html += `<span style="color: #666; font-size: 0.9em;">${sector.reason}</span></li>`;
+            });
+            html += `</ul>`;
+            html += `<p><strong>⚡ 關鍵催化劑：</strong>${layer2.catalysts.join('、')}</p>`;
+            html += `</div>`;
+
+            // 第三層：操作名單
+            html += '<h3 style="color: #2c3e50; border-bottom: 2px solid #f39c12; padding-bottom: 10px;">📈 第三層：精選操作名單</h3>';
+            const layer3 = data.layer3_trading_watchlist;
+            html += `<div style="margin: 15px 0; padding: 15px; background: #f0f8ff; border-radius: 5px;">`;
+            layer3.forEach(stock => {
+                const signalColor = stock.signal === '強力買進' ? '#27ae60' : stock.signal === '買進' ? '#f39c12' : '#95a5a6';
+                html += `<div style="margin: 10px 0; padding: 10px; background: white; border-left: 4px solid ${signalColor}; border-radius: 3px;">`;
+                html += `<p><strong>${stock.symbol} - ${stock.company}</strong></p>`;
+                html += `<p>評分：<span style="color: ${signalColor}; font-weight: bold;">${stock.score}/100</span> | `;
+                html += `信號：<span style="color: ${signalColor}; font-weight: bold;">${stock.signal}</span></p>`;
+                html += `<p>目標價：$${stock.target_price} | 現價：$${stock.current_price}</p>`;
+                html += `<p style="color: #666; font-size: 0.9em;">${stock.reason}</p>`;
+                html += `</div>`;
+            });
+            html += `</div>`;
+
+            // 第四層：選擇權策略
+            html += '<h3 style="color: #2c3e50; border-bottom: 2px solid #9b59b6; padding-bottom: 10px;">⚡ 第四層：選擇權策略建議</h3>';
+            const layer4 = data.layer4_options_strategies;
+            html += `<div style="margin: 15px 0; padding: 15px; background: #f8f0ff; border-radius: 5px;">`;
+            html += `<p><strong>🎯 推薦策略：</strong>${layer4.recommended_strategy}</p>`;
+            html += `<div style="margin: 15px 0;">`;
+            layer4.strategies.forEach(strategy => {
+                html += `<div style="margin: 10px 0; padding: 10px; background: white; border-radius: 3px; border: 1px solid #ddd;">`;
+                html += `<p><strong>${strategy.type}</strong> - ${strategy.target}</p>`;
+                if (strategy.strike) {
+                    html += `<p>履約價：$${strategy.strike} | 到期日：${strategy.expiry}</p>`;
+                    html += `<p>權利金：$${strategy.premium} | 風險等級：${strategy.risk_level}</p>`;
+                    html += `<p>最大獲利：${strategy.max_profit} | 最大損失：$${strategy.max_loss}</p>`;
+                } else {
+                    html += `<p>多頭履約價：$${strategy.long_strike} | 空頭履約價：$${strategy.short_strike}</p>`;
+                    html += `<p>淨權利金：$${strategy.net_premium} | 風險等級：${strategy.risk_level}</p>`;
+                    html += `<p>最大獲利：$${strategy.max_profit} | 最大損失：$${strategy.max_loss}</p>`;
+                }
+                html += `</div>`;
+            });
+            html += `</div></div>`;
+
+            // AI整合建議
+            html += '<h3 style="color: #2c3e50; border-bottom: 2px solid #1abc9c; padding-bottom: 10px;">🤖 AI整合投資建議</h3>';
+            const ai = data.ai_integrated_recommendation;
+            html += `<div style="margin: 15px 0; padding: 15px; background: #e8f8f5; border-radius: 5px;">`;
+            html += `<p><strong>📊 整體策略：</strong>${ai.overall_strategy}</p>`;
+            html += `<p><strong>💰 資產配置：</strong></p>`;
+            html += `<ul style="margin: 10px 0; padding-left: 20px;">`;
+            Object.entries(ai.allocation).forEach(([key, value]) => {
+                html += `<li>${key}：${value}</li>`;
+            });
+            html += `</ul>`;
+            html += `<p><strong>💡 關鍵要點：</strong></p>`;
+            html += `<ul style="margin: 10px 0; padding-left: 20px;">`;
+            ai.key_points.forEach(point => {
+                html += `<li>${point}</li>`;
+            });
+            html += `</ul>`;
+            html += `<p><strong>⚠️ 風險提醒：</strong><span style="color: #e74c3c;">${ai.risk_warning}</span></p>`;
+            html += `</div>`;
+
+            html += `<div style="text-align: center; margin-top: 20px; padding: 15px; background: #ecf0f1; border-radius: 5px;">`;
+            html += `<p style="color: #7f8c8d; margin: 0;">分析完成時間：${new Date(data.timestamp).toLocaleString('zh-TW')}</p>`;
+            html += `</div>`;
+            
+            html += '</div>';
+            return html;
+        }
+
+        function formatSimpleResult(data) {
+            if (data.error) {
+                return `<div style="color: #e74c3c; padding: 10px; background: #fdf2f2; border-radius: 5px;">
+                    <strong>❌ 錯誤：</strong>${data.error}<br>
+                    <span style="font-size: 0.9em;">${data.message || ''}</span>
+                </div>`;
+            }
+
+            let html = '<div style="background: #f8f9fa; padding: 15px; border-radius: 5px; line-height: 1.5;">';
+            
+            if (data.data) {
+                const d = data.data;
+                
+                if (d.market_sentiment) {
+                    html += `<p><strong>市場情緒：</strong>${d.market_sentiment}</p>`;
+                }
+                
+                if (d.economic_indicators) {
+                    html += `<p><strong>經濟指標：</strong></p><ul>`;
+                    Object.entries(d.economic_indicators).forEach(([key, value]) => {
+                        const keyMap = {
+                            'gdp_growth': 'GDP成長率',
+                            'inflation': '通膨率', 
+                            'unemployment': '失業率'
+                        };
+                        html += `<li>${keyMap[key] || key}：${value}</li>`;
+                    });
+                    html += `</ul>`;
+                }
+                
+                if (d.market_trend) {
+                    html += `<p><strong>市場趨勢：</strong>${d.market_trend}</p>`;
+                }
+                
+                if (d.focus_sectors) {
+                    html += `<p><strong>重點產業：</strong>${d.focus_sectors.join('、')}</p>`;
+                }
+                
+                if (d.catalysts) {
+                    html += `<p><strong>催化劑：</strong>${d.catalysts.join('、')}</p>`;
+                }
+                
+                if (d.rotation_signal) {
+                    html += `<p><strong>輪動信號：</strong>${d.rotation_signal}</p>`;
+                }
+                
+                if (d.watchlist) {
+                    html += `<p><strong>觀察名單：</strong></p><ul>`;
+                    d.watchlist.forEach(stock => {
+                        html += `<li>${stock.symbol} - 評分：${stock.score} - ${stock.signal}</li>`;
+                    });
+                    html += `</ul>`;
+                }
+                
+                if (d.strategy) {
+                    html += `<p><strong>策略：</strong>${d.strategy}</p>`;
+                    html += `<p><strong>標的：</strong>${d.target}</p>`;
+                    html += `<p><strong>履約價：</strong>${d.strike}</p>`;
+                    html += `<p><strong>到期日：</strong>${d.expiry}</p>`;
+                    html += `<p><strong>風險等級：</strong>${d.risk_level}</p>`;
+                }
+            }
+            
+            html += '</div>';
+            return html;
         }
 
         function testLayer1() {
