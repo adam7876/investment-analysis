@@ -91,7 +91,7 @@ def index():
                     <h1 class="text-primary mb-3">
                         <i class="fas fa-robot"></i> AI增強美股投資分析系統
                     </h1>
-                    <p class="lead text-muted">Vercel部署成功！完整AI功能已啟用 🔄 自動部署測試</p>
+                    <p class="lead text-muted">Vercel部署成功！完整AI功能已啟用 🔄 自動部署測試 v2</p>
                     <div class="mt-4">
                         <span class="badge bg-success status-badge pulse">
                             <i class="fas fa-check-circle"></i> 系統運行正常
