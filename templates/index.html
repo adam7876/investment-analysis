@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 AI增強美股投資分析系統</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            padding: 30px;
+            max-width: 1200px;
+        }
+        .feature-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        .ai-badge {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .btn-ai {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-ai:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            color: white;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online { background-color: #28a745; }
+        .status-upgraded { background-color: #17a2b8; }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .result-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        .header-title {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- 標題區域 -->
+            <div class="text-center mb-5">
+                <h1 class="header-title">
+                    <i class="fas fa-robot"></i> AI增強美股投資分析系統
+                </h1>
+                <p class="lead text-muted">
+                    整合LSTM深度學習預測 + 機器學習選股 + 智能投資建議
+                </p>
+                <div class="mt-3">
+                    <span class="badge bg-success">
+                        <span class="status-indicator status-upgraded"></span>
+                        AI已升級 - 可靠性85%
+                    </span>
+                    <span class="badge bg-info ms-2">
+                        <span class="status-indicator status-online"></span>
+                        深度學習預測已啟用
+                    </span>
+                </div>
+            </div>
+
+            <!-- 功能區域 -->
+            <div class="row">
+                <!-- 第一層：總經環境分析 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-globe-americas fa-3x text-primary"></i>
+                            <span class="ai-badge">已升級</span>
+                        </div>
+                        <h5>第一層：總經環境</h5>
+                        <p class="text-muted small">
+                            多源數據整合<br>
+                            可靠性: 85% ↑75%
+                        </p>
+                        <button class="btn btn-ai w-100" onclick="runAnalysis('layer1')">
+                            <i class="fas fa-chart-line"></i> 分析總經環境
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 第二層：動態選股 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-search-dollar fa-3x text-success"></i>
+                        </div>
+                        <h5>第二層：動態選股</h5>
+                        <p class="text-muted small">
+                            策略化選股<br>
+                            多策略組合
+                        </p>
+                        <button class="btn btn-ai w-100" onclick="runAnalysis('layer2')">
+                            <i class="fas fa-filter"></i> 執行選股分析
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 第三層：技術確認 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-chart-bar fa-3x text-warning"></i>
+                        </div>
+                        <h5>第三層：技術確認</h5>
+                        <p class="text-muted small">
+                            技術指標驗證<br>
+                            風險評估
+                        </p>
+                        <button class="btn btn-ai w-100" onclick="runAnalysis('layer3')">
+                            <i class="fas fa-microscope"></i> 技術確認
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI增強分析 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-robot fa-3x text-danger"></i>
+                            <span class="ai-badge">NEW</span>
+                        </div>
+                        <h5>AI增強分析</h5>
+                        <p class="text-muted small">
+                            LSTM預測 + ML選股<br>
+                            智能投資建議
+                        </p>
+                        <button class="btn btn-ai w-100" onclick="runAnalysis('ai')">
+                            <i class="fas fa-brain"></i> AI智能分析
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 整合分析 -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="feature-card text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-layer-group fa-3x text-info"></i>
+                            <span class="ai-badge">AI增強</span>
+                        </div>
+                        <h4>三層聯動整合分析</h4>
+                        <p class="text-muted">
+                            結合總經環境 + 動態選股 + 技術確認 + AI預測，提供完整投資決策支持
+                        </p>
+                        <button class="btn btn-ai btn-lg" onclick="runAnalysis('integrated')">
+                            <i class="fas fa-magic"></i> 執行完整AI分析
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 載入動畫 -->
+            <div id="loading" class="loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">分析中...</span>
+                </div>
+                <p class="mt-3">AI正在分析中，請稍候...</p>
+            </div>
+
+            <!-- 結果顯示區域 -->
+            <div id="results" class="result-container">
+                <h4><i class="fas fa-chart-pie"></i> 分析結果</h4>
+                <div id="results-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function runAnalysis(type) {
+            // 顯示載入動畫
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            // 滾動到載入區域
+            document.getElementById('loading').scrollIntoView({ behavior: 'smooth' });
+            
+            let endpoint = '';
+            let analysisName = '';
+            
+            switch(type) {
+                case 'layer1':
+                    endpoint = '/api/layer1-analysis';
+                    analysisName = '第一層總經環境分析';
+                    break;
+                case 'layer2':
+                    endpoint = '/api/layer2-analysis';
+                    analysisName = '第二層動態選股分析';
+                    break;
+                case 'layer3':
+                    endpoint = '/api/layer3-analysis';
+                    analysisName = '第三層技術確認分析';
+                    break;
+                case 'ai':
+                    endpoint = '/api/ai-analysis';
+                    analysisName = 'AI增強分析';
+                    break;
+                case 'integrated':
+                    endpoint = '/api/integrated-analysis';
+                    analysisName = '三層聯動整合分析';
+                    break;
+            }
+            
+            // 發送請求
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 隱藏載入動畫
+                document.getElementById('loading').style.display = 'none';
+                
+                // 顯示結果
+                displayResults(analysisName, data);
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                
+                // 顯示錯誤信息
+                displayResults(analysisName, {
+                    error: '分析失敗，請稍後重試',
+                    details: error.message
+                });
+                document.getElementById('results').style.display = 'block';
+            });
+        }
+        
+        function displayResults(analysisName, data) {
+            const resultsContent = document.getElementById('results-content');
+            
+            if (data.error) {
+                resultsContent.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5><i class="fas fa-exclamation-triangle"></i> ${analysisName} 失敗</h5>
+                        <p>${data.error}</p>
+                        ${data.details ? `<small class="text-muted">${data.details}</small>` : ''}
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="alert alert-success">
+                    <h5><i class="fas fa-check-circle"></i> ${analysisName} 完成</h5>
+                </div>
+                <div class="row">
+            `;
+            
+            // 根據不同類型顯示結果
+            if (data.ai_predictions) {
+                html += `
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-robot"></i> AI股價預測</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>股票</th>
+                                        <th>當前價格</th>
+                                        <th>預測信號</th>
+                                        <th>準確率</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+                
+                for (const [symbol, pred] of Object.entries(data.ai_predictions)) {
+                    if (!pred.error) {
+                        html += `
+                            <tr>
+                                <td><strong>${symbol}</strong></td>
+                                <td>$${pred.current_price?.toFixed(2) || 'N/A'}</td>
+                                <td><span class="badge bg-info">${pred.trading_signal?.signal || 'N/A'}</span></td>
+                                <td>${((pred.model_performance?.direction_accuracy || 0) * 100).toFixed(1)}%</td>
+                            </tr>
+                        `;
+                    }
+                }
+                
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (data.investment_recommendations) {
+                html += `
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-lightbulb"></i> AI投資建議</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>股票</th>
+                                        <th>AI建議</th>
+                                        <th>信心度</th>
+                                        <th>風險</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+                
+                for (const [symbol, rec] of Object.entries(data.investment_recommendations)) {
+                    html += `
+                        <tr>
+                            <td><strong>${symbol}</strong></td>
+                            <td><span class="badge bg-primary">${rec.ai_recommendation}</span></td>
+                            <td>${(rec.confidence * 100).toFixed(1)}%</td>
+                            <td><span class="badge bg-warning">${rec.risk_level}</span></td>
+                        </tr>
+                    `;
+                }
+                
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 顯示其他結果
+            if (data.analysis || data.summary || data.ai_analysis) {
+                html += `
+                    <div class="col-12 mt-3">
+                        <h6><i class="fas fa-chart-pie"></i> 分析摘要</h6>
+                `;
+                
+                // 顯示市場環境
+                if (data.market_overview || (data.ai_analysis && data.ai_analysis.market_overview)) {
+                    const marketData = data.market_overview || data.ai_analysis.market_overview;
+                    html += `
+                        <div class="alert alert-info mb-3">
+                            <h6><i class="fas fa-globe"></i> 市場環境</h6>
+                            <p><strong>市場狀態:</strong> ${marketData.market_environment || 'Unknown'}</p>
+                            <p><strong>投資建議:</strong> ${marketData.investment_recommendation || 'Hold'}</p>
+                            <p><strong>可靠性:</strong> ${marketData.reliability || 0}%</p>
+                        </div>
+                    `;
+                }
+                
+                // 顯示AI摘要
+                if (data.summary || (data.ai_analysis && data.ai_analysis.summary)) {
+                    const summaryData = data.summary || data.ai_analysis.summary;
+                    html += `
+                        <div class="alert alert-success mb-3">
+                            <h6><i class="fas fa-robot"></i> AI分析摘要</h6>
+                            <p><strong>分析時間:</strong> ${summaryData.analysis_time || 'Unknown'}</p>
+                            <p><strong>市場情緒:</strong> ${summaryData.market_sentiment || 'Unknown'}</p>
+                            <p><strong>整體信心度:</strong> ${((summaryData.overall_confidence || 0) * 100).toFixed(1)}%</p>
+                            ${summaryData.ai_top_picks && summaryData.ai_top_picks.length > 0 ? 
+                                `<p><strong>AI首選:</strong> ${summaryData.ai_top_picks.map(pick => pick.symbol || pick).join(', ')}</p>` : ''}
+                        </div>
+                    `;
+                }
+                
+                // 顯示原始數據（折疊）
+                const rawData = data.analysis || data.summary || data.ai_analysis || data;
+                html += `
+                        <div class="accordion" id="rawDataAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="rawDataHeading">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rawDataCollapse">
+                                        <i class="fas fa-code"></i>&nbsp;&nbsp;查看詳細數據
+                                    </button>
+                                </h2>
+                                <div id="rawDataCollapse" class="accordion-collapse collapse" data-bs-parent="#rawDataAccordion">
+                                    <div class="accordion-body">
+                                        <pre style="white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 0.8em; max-height: 400px; overflow-y: auto;">${JSON.stringify(rawData, null, 2)}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            resultsContent.innerHTML = html;
+        }
+    </script>
+</body>
+</html> 

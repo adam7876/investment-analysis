@@ -14,7 +14,8 @@ import numpy as np
 from loguru import logger
 import pandas as pd
 
-from layer1_collector import Layer1Collector
+# 導入分析函數
+from layer1_collector import collect_all_data as layer1_collect_all_data
 from layer2_collector import Layer2Collector
 from layer3_collector import Layer3Collector
 from integrated_analyzer import IntegratedAnalyzer
@@ -77,8 +78,7 @@ def health_check():
 def collect_layer1_data():
     """收集第一層數據的API端點"""
     try:
-        collector = Layer1Collector()
-        data = collector.collect_all_data()
+        data = layer1_collect_all_data()
         
         # 更新全域數據
         global latest_layer1_data
@@ -102,11 +102,10 @@ def collect_layer1_data():
 def get_layer1_summary():
     """獲取第一層數據摘要"""
     try:
-        collector = Layer1Collector()
-        summary = collector.get_summary_report()
+        data = layer1_collect_all_data()
         return jsonify({
             'success': True,
-            'data': summary
+            'data': data
         })
     except Exception as e:
         logger.error(f"第一層摘要獲取失敗: {str(e)}")
@@ -406,6 +405,98 @@ def layer2():
 def layer3():
     """第三層功能頁面（預留）"""
     return render_template('layer3.html')
+
+# ==================== AI增強分析 API ====================
+
+@app.route('/api/ai-analysis', methods=['POST'])
+def ai_analysis():
+    """AI增強分析API端點"""
+    try:
+        logger.info("🤖 開始執行AI增強分析...")
+        
+        # 導入AI增強分析器
+        from ai_enhanced_analyzer import AIEnhancedAnalyzer
+        
+        analyzer = AIEnhancedAnalyzer()
+        
+        # 執行AI分析（使用較少股票以加快速度）
+        test_symbols = ['AAPL', 'MSFT', 'GOOGL', 'TSLA', 'NVDA']
+        results = analyzer.analyze_with_ai(test_symbols, enable_lstm=True)
+        
+        # 轉換numpy類型
+        results = convert_numpy_types(results)
+        
+        logger.info("✅ AI增強分析完成")
+        return jsonify(results)
+        
+    except Exception as e:
+        logger.error(f"❌ AI分析失敗: {str(e)}")
+        return jsonify({
+            'error': f'AI分析失敗: {str(e)}',
+            'success': False
+        }), 500
+
+@app.route('/api/layer1-analysis', methods=['POST'])
+def layer1_analysis():
+    """第一層分析API端點（增強版）"""
+    try:
+        logger.info("📊 開始執行第一層總經環境分析...")
+        
+        # 使用增強版收集器
+        from layer1_collector import collect_all_data
+        
+        results = collect_all_data()
+        results = convert_numpy_types(results)
+        
+        logger.info("✅ 第一層分析完成")
+        return jsonify(results)
+        
+    except Exception as e:
+        logger.error(f"❌ 第一層分析失敗: {str(e)}")
+        return jsonify({
+            'error': f'第一層分析失敗: {str(e)}',
+            'success': False
+        }), 500
+
+@app.route('/api/layer2-analysis', methods=['POST'])
+def layer2_analysis():
+    """第二層分析API端點"""
+    try:
+        logger.info("🔍 開始執行第二層動態選股分析...")
+        
+        collector = Layer2Collector()
+        results = collector.collect_all_data()
+        results = convert_numpy_types(results)
+        
+        logger.info("✅ 第二層分析完成")
+        return jsonify(results)
+        
+    except Exception as e:
+        logger.error(f"❌ 第二層分析失敗: {str(e)}")
+        return jsonify({
+            'error': f'第二層分析失敗: {str(e)}',
+            'success': False
+        }), 500
+
+@app.route('/api/layer3-analysis', methods=['POST'])
+def layer3_analysis():
+    """第三層分析API端點"""
+    try:
+        logger.info("📈 開始執行第三層技術確認分析...")
+        
+        collector = Layer3Collector()
+        results = collector.collect_all_data()
+        results = convert_numpy_types(results)
+        
+        logger.info("✅ 第三層分析完成")
+        return jsonify(results)
+        
+    except Exception as e:
+        logger.error(f"❌ 第三層分析失敗: {str(e)}")
+        return jsonify({
+            'error': f'第三層分析失敗: {str(e)}',
+            'success': False
+        }), 500
 
 if __name__ == '__main__':
     # 獲取端口號（Heroku會提供PORT環境變數）
