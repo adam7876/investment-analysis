@@ -1,2 +1,2 @@
-Flask==3.0.0
-requests==2.31.0 
+# 空的requirements.txt - 不安裝任何外部依賴
+# 使用Python內建模組確保部署成功 
