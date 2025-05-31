@@ -18,12 +18,21 @@ app = Flask(__name__)
 # 嘗試導入AI功能模組
 try:
     from layer1_collector_enhanced import Layer1CollectorEnhanced
-    from ai_enhanced_analyzer import AIEnhancedAnalyzer
-    AI_AVAILABLE = True
-    print("✅ AI模組載入成功")
+    AI_DATA_AVAILABLE = True
+    print("✅ 數據收集模組載入成功")
 except ImportError as e:
-    print(f"⚠️ AI模組載入失敗: {e}")
-    AI_AVAILABLE = False
+    print(f"⚠️ 數據收集模組載入失敗: {e}")
+    AI_DATA_AVAILABLE = False
+
+try:
+    from ai_enhanced_analyzer import AIEnhancedAnalyzer
+    AI_ANALYSIS_AVAILABLE = True
+    print("✅ AI分析模組載入成功")
+except ImportError as e:
+    print(f"⚠️ AI分析模組載入失敗: {e}")
+    AI_ANALYSIS_AVAILABLE = False
+
+AI_AVAILABLE = AI_DATA_AVAILABLE and AI_ANALYSIS_AVAILABLE
 
 @app.route('/')
 def index():
@@ -91,7 +100,7 @@ def index():
                     <h1 class="text-primary mb-3">
                         <i class="fas fa-robot"></i> AI增強美股投資分析系統
                     </h1>
-                    <p class="lead text-muted">Vercel部署成功！完整AI功能已啟用 🔄 自動部署測試 v2</p>
+                    <p class="lead text-muted">Vercel部署成功！智能投資分析系統 🚀 v3.2.0 優化版</p>
                     <div class="mt-4">
                         <span class="badge bg-success status-badge pulse">
                             <i class="fas fa-check-circle"></i> 系統運行正常
@@ -100,7 +109,7 @@ def index():
                             <i class="fas fa-rocket"></i> Vercel部署成功
                         </span>
                         <span class="badge bg-warning status-badge ms-2">
-                            <i class="fas fa-cogs"></i> 版本 v3.1.0 (完整功能)
+                            <i class="fas fa-cogs"></i> 版本 v3.2.0 (Vercel優化)
                         </span>
                     </div>
                 </div>
@@ -336,6 +345,7 @@ def index():
                                     <p><strong>狀態:</strong> ${data.status}</p>
                                     <p><strong>AI功能:</strong> ${data.ai_available ? '✅ 可用' : '❌ 不可用'}</p>
                                     <p><strong>數據收集器:</strong> ${data.data_collector_available ? '✅ 可用' : '❌ 不可用'}</p>
+                                    <p><strong>AI分析:</strong> ${data.ai_analysis_available ? '✅ 可用' : '❌ 不可用'}</p>
                                     <p><strong>時間:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
                                 </div>
                             </div>
@@ -363,21 +373,29 @@ def health():
     """健康檢查"""
     return jsonify({
         'status': 'healthy',
-        'version': 'v3.1.0 (完整功能)',
+        'version': 'v3.2.0 (Vercel優化版)',
         'timestamp': datetime.now().isoformat(),
         'ai_available': AI_AVAILABLE,
-        'data_collector_available': AI_AVAILABLE,
-        'platform': 'Vercel'
+        'data_collector_available': AI_DATA_AVAILABLE,
+        'ai_analysis_available': AI_ANALYSIS_AVAILABLE,
+        'platform': 'Vercel',
+        'mode': 'Production' if AI_AVAILABLE else 'Demo (模擬數據)'
     })
 
 @app.route('/api/data-collection', methods=['POST'])
 def data_collection():
     """數據收集API"""
     try:
-        if not AI_AVAILABLE:
+        if not AI_DATA_AVAILABLE:
+            # 提供模擬數據
             return jsonify({
-                'success': False,
-                'error': 'AI模組未載入，使用模擬數據'
+                'success': True,
+                'reliability': 85,
+                'sources_count': 4,
+                'fear_greed': 65,
+                'market_data': '4個指數（模擬數據）',
+                'collection_time': 1.5,
+                'note': '使用模擬數據 - AI模組未載入'
             })
         
         # 執行數據收集
@@ -407,10 +425,24 @@ def data_collection():
 def ai_analysis():
     """AI分析API"""
     try:
-        if not AI_AVAILABLE:
+        if not AI_ANALYSIS_AVAILABLE:
+            # 提供模擬AI分析結果
+            data = request.get_json()
+            symbols = data.get('symbols', ['AAPL', 'MSFT', 'GOOGL'])
+            
+            mock_predictions = {}
+            for symbol in symbols:
+                mock_predictions[symbol] = {
+                    'signal': '持有',
+                    'confidence': 75
+                }
+            
             return jsonify({
-                'success': False,
-                'error': 'AI模組未載入'
+                'success': True,
+                'lstm_predictions': mock_predictions,
+                'ai_recommendation': '基於模擬數據：當前市場環境適中，建議保持謹慎樂觀態度',
+                'risk_level': 'Medium',
+                'note': '使用模擬數據 - AI模組未載入'
             })
         
         data = request.get_json()
@@ -438,9 +470,15 @@ def integrated_analysis():
     """整合分析API"""
     try:
         if not AI_AVAILABLE:
+            # 提供模擬整合分析結果
             return jsonify({
-                'success': False,
-                'error': 'AI模組未載入'
+                'success': True,
+                'market_environment': 'Neutral',
+                'investment_recommendation': 'Hold',
+                'recommended_stocks': ['AAPL', 'MSFT', 'GOOGL'],
+                'technical_signals': 'Neutral',
+                'overall_reliability': 85,
+                'note': '使用模擬數據 - AI模組未載入'
             })
         
         # 執行整合分析
